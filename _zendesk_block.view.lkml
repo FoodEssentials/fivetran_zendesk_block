@@ -51,6 +51,12 @@ view: ticket {
     sql: ${TABLE}.is_public ;;
   }
 
+  dimension: custom_ticket_categories {
+    description: "A required field within a Zendesk ticket. Explaining which platform the ticket occured within, and what the issue was. "
+    type: string
+    sql: ${TABLE}.custom_ticket_categories ;;
+  }
+
   dimension: priority {
     type: string
     sql: case when LOWER(${TABLE}.priority) = 'low' then '2 - Low'
