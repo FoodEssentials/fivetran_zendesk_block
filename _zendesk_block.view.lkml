@@ -57,6 +57,99 @@ view: ticket {
     sql: ${TABLE}.custom_ticket_categories ;;
   }
 
+  dimension: ticket_category {
+  case: {
+    when: {
+      sql: ${custom_ticket_categories} = "api" ;;
+      label:  "API"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("publish__bug__p3s2", "publish__bug__p2s3","publish__bug__p3s3","publish__bug__p2s2","explore__bug","explore__bug__p2s2","capture__bug");;
+      label: "Bug"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__check_in" ;;
+      label: "Check In"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("data_error","onboard__data_error","explore__data_error","capture__data_error");;
+      label: "Data Error"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__account_error" ;;
+      label: "Account Error"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("data_request", "onboard__updating_data","explore__data_request","capture__data_request");;
+      label: "Data Request"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__exemption";;
+      label: "Exemption"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__expo";;
+      label: "Expo"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("feature_request/_product_feedback","explore__feature_request/_product_feedback","capture__feature_request/_product_feedback");;
+      label: "Feature Request/Product Feedback"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("onboard__image_processing_issues","capture__image_issues");;
+      label: "Image Issues"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__image_provider";;
+      label: "Image Provider"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__image_requirements";;
+      label: "Image Requirements"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__li_initiative_overview";;
+      label: "Initiative Overview"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "internal_request";;
+      label: "Internal Request"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("publish__other", "publish__unknown", "onboard__other","explore__other", "capture__other", "capture__unknown");;
+      label: "Other"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("platform_downtime","capture__platform_downtime");;
+      label: "Platform Downtime"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("onboard__portal_navigation");;
+      label: "Portal Navigation"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__registration_error";;
+      label: "Registration"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__submission_portal_error";;
+      label: "Submission Portal Error"
+    }
+    when: {
+      sql: ${custom_ticket_categories}= "onboard__third_party_questions";;
+      label: "Third Party Questions"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("training_gap","explore__training_gap","capture__training_gap");;
+      label: "Training Gap"
+    }
+    when: {
+      sql: ${custom_ticket_categories} IN("user_permissions_and_admin","onboard__change_of_contact","onboard__contact_request","explore__user_permissions_and_admin","capture__user_permissions_and_admin");;
+      label: "User Permissions and Admin"
+    }
+    }
+    }
+
   dimension: priority {
     type: string
     sql: case when LOWER(${TABLE}.priority) = 'low' then '2 - Low'
