@@ -852,6 +852,7 @@ view: group {
       time,
       date,
       week,
+      day_of_week_index,
       month,
       quarter,
       year
@@ -955,6 +956,7 @@ view: ticket_history_facts {
       time,
       date,
       week,
+      day_of_week_index,
       month,
       quarter,
       year
@@ -1034,6 +1036,7 @@ view: ticket_history_facts {
       time,
       date,
       week,
+      day_of_week_index,
       month,
       quarter,
       year
