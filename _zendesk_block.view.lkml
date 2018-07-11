@@ -148,6 +148,30 @@ view: ticket {
       label: "User Permissions and Admin"
     }
     }
+  }
+  dimension: Platform {
+  case: {
+    when: {
+      sql:${custom_ticket_categories} IN("onboard__account_error", "onboard__change_of_contact", "onboard__check_in", "onboard__contact_request", "onboard__data_error","onboard__exemption", "onboard__expo", "onboard__image_processing_issues", "onboard__image_provider", "onboard__image_requirements", "onboard__li_initiative_overview", "onboard__other", "onboard__portal_navigation", "onboard__registration_error", "onboard__submission_confirmation", "onboard__submission_portal_error", "onboard__third_party_questions", "onboard__updating_data");;
+      label: "Onboard"
+    }
+    when: {
+      sql:${custom_ticket_categories} IN("data_error", "feature_request/_product_feedback", "platform_downtime", "publish__bug__p2s2", "publish__bug__p2s3", "publish__bug__p3s2" ,"publish__bug__p3s3","data_request", "publish__other", "publish__unknown","user_permissions_and_admin", "training_gap");;
+      label: "Publish"
+    }
+    when: {
+      sql:${custom_ticket_categories} IN("explore__bug","explore__bug__p2s2", "explore__data_error", "explore__data_request", "explore__feature_request/_product_feedback", "explore__other", "explore__training_gap", "explore__user_permissions_and_admin");;
+      label: "Explore"
+    }
+    when: {
+      sql:${custom_ticket_categories} IN("capture__bug", "capture__data_error", "capture__data_request", "capture__feature_request/_product_feedback", "capture__image_issues", "capture__other", "capture__platform_downtime", "capture__training_gap", "capture__unknown", "capture__user_permissions_and_admin");;
+      label: "Capture"
+    }
+    when: {
+      sql:${custom_ticket_categories} IN("api","internal_requests");;
+      label: "Other"
+  }
+    }
     }
 
   dimension: priority {
@@ -221,6 +245,7 @@ view: ticket {
     timeframes: [
       raw,
       day_of_week,
+      day_of_week_index,
       hour_of_day,
       time,
       date,
@@ -1036,6 +1061,7 @@ view: ticket_history_facts {
       time,
       date,
       week,
+      day_of_week,
       day_of_week_index,
       month,
       quarter,
