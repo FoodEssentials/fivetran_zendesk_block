@@ -2,6 +2,7 @@ connection: "bigquery"
 
 include: "*_zendesk_block.view"
 include: "*_zendesk_variables.view"
+include: "_zendesk_common_term_count.view"
 include: "*.dashboard"
 
 explore: ticket {
@@ -68,5 +69,11 @@ explore: ticket {
   join: number_of_reopens {
     sql_on: ${ticket.id} = ${number_of_reopens.ticket_id} ;;
     relationship: one_to_one
+  }
+
+  join: zendesk_common_term_count {
+    sql_on: ${ticket.id} = ${zendesk_common_term_count.id} ;;
+    type: full_outer
+    relationship:  many_to_one
   }
 }
