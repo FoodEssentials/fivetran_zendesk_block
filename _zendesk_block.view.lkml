@@ -222,6 +222,19 @@ view: ticket {
     value_format_name: decimal_2
   }
 
+  dimension: avg_business_days_to_solve {
+    type: number
+    sql: ((UNIX_DATE(${ticket_history_facts.solved_date}) - UNIX_DATE(${created_date})) + 1)
+  -((EXTRACT(WEEK FROM ${ticket_history_facts.solved_date}) - EXTRACT(WEEK FROM ${created_date})) * 2)
+  -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${created_date}) = 1 THEN 1 ELSE 0 END)
+  -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${ticket_history_facts.solved_date}) = 7 THEN 1 ELSE 0 END) ;;
+  }
+  measure: avg_bus_days_to_solve {
+    type: average
+    sql: ${avg_business_days_to_solve} ;;
+    value_format_name: decimal_2
+
+}
   dimension: is_backlogged {
     type: yesno
     sql: ${status} = 'pending' ;;
@@ -1149,5 +1162,25 @@ view: ticket_assignee_facts {
 
   set: detail {
     fields: [assignee_id, lifetime_tickets, first_ticket_time, latest_ticket_time, avg_tickets_per_day]
+  }
+}
+view: zendesk_common_term_count {
+  derived_table: {
+    sql:
+      WITH x AS (SELECT id, split(body, ' ') AS arr
+        from `storied-landing-160804.zendesk.ticket_comment`)
+
+    SELECT id, word FROM x, UNNEST(arr) as word
+    ;;
+  }
+
+  dimension: id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.id ;;
+  }
+  dimension: word {
+    type: string
+    sql: ${TABLE}.word ;;
   }
 }
