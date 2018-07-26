@@ -449,7 +449,8 @@ view: ticket {
       ticket_comment.count,
       ticket_field_history.count,
       ticket_tag.count,
-      ticket_tag_history.count
+      ticket_tag_history.count,
+      ticket_comment.body
     ]
   }
 
