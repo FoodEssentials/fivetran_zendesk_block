@@ -444,13 +444,15 @@ view: ticket {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
+      created_date,
       id,
       organization.name,
       ticket_comment.count,
       ticket_field_history.count,
       ticket_tag.count,
       ticket_tag_history.count,
-      ticket_comment.body
+      subject,
+      ticket_comment.body,
     ]
   }
 
