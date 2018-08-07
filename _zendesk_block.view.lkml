@@ -10,16 +10,6 @@ view: ticket {
     type: number
     sql: ${TABLE}.id ;;
     html: <img src="http://www.google.com/s2/favicons?domain=www.zendesk.com" height=16 width=16> {{ value }} ;;
-    link: {
-      label: "Zendesk Ticket"
-      url: "https://{{ ticket._ZENDESK_INSTANCE_DOMAIN._value }}.zendesk.com/agent/tickets/{{ value }}"
-      icon_url: "https://d1eipm3vz40hy0.cloudfront.net/images/logos/zendesk-favicon.ico"
-    }
-    link: {
-      label: "Zendesk Ticket Detail"
-      url: "https://{{ ticket._LOOKER_INSTANCE_DOMAIN._value }}.looker.com/dashboards/{{ ticket._ZENDESK_TICKET_DETAIL_DASHBOARD_ID._value }}?Ticket={{ value }}"
-      icon_url: "http://www.looker.com/favicon.ico"
-    }
   }
 
   dimension: id_direct_link {
@@ -444,13 +434,15 @@ view: ticket {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
+      created_date,
       id,
       organization.name,
       ticket_comment.count,
       ticket_field_history.count,
       ticket_tag.count,
       ticket_tag_history.count,
-      ticket_comment.body
+      subject,
+      ticket_comment.body,
     ]
   }
 
