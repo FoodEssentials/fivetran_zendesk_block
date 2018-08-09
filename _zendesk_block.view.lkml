@@ -9,7 +9,6 @@ view: ticket {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
-    html: <img src="http://www.google.com/s2/favicons?domain=www.zendesk.com" height=16 width=16> {{ value }} ;;
   }
 
   dimension: id_direct_link {
@@ -434,13 +433,8 @@ view: ticket {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-      created_date,
       id,
       organization.name,
-      ticket_comment.count,
-      ticket_field_history.count,
-      ticket_tag.count,
-      ticket_tag_history.count,
       subject,
       ticket_comment.body,
     ]
