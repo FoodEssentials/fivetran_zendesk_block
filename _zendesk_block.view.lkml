@@ -4,11 +4,26 @@ view: ticket {
   extends: [_variables]
   sql_table_name: zendesk.ticket ;;
 
+  dimension_group: _fivetran_synced {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
+  }
   # ----- database fields -----
   dimension: id {
-    primary_key: yes
+    description: "Unique ID for the Zendesk ticket."
     type: number
     sql: ${TABLE}.id ;;
+    primary_key: yes
   }
 
   dimension: id_direct_link {
@@ -19,15 +34,15 @@ view: ticket {
   }
 
   dimension: allow_channelback {
+    description: "Is false if channelback is disabled, true otherwise. Only applicable for channels framework ticket."
     type: yesno
     sql: ${TABLE}.allow_channelback ;;
-    description: "Is false if channelback is disabled, true otherwise. Only applicable for channels framework ticket"
   }
 
   dimension: description {
+    description: "The first comment on the ticket."
     type: string
     sql: ${TABLE}.description ;;
-    description: "The first comment on the ticket"
   }
 
   dimension: has_incidents {
@@ -36,17 +51,19 @@ view: ticket {
   }
 
   dimension: is_public {
+    description: "If the Zendesk ticket is public."
     type: yesno
     sql: ${TABLE}.is_public ;;
   }
 
   dimension: custom_ticket_categories {
-    description: "A required field within a Zendesk ticket. Explaining which platform the ticket occured within, and what the issue was. "
+    description: "A required field within a Zendesk ticket. Explaining which platform the ticket occured within, and what the issue was."
     type: string
     sql: ${TABLE}.custom_ticket_categories ;;
   }
 
   dimension: ticket_category {
+    description: "Client-facing ticket categories bucketing custom ticket categories."
     case: {
       when: {
         sql: ${custom_ticket_categories} = "api" ;;
@@ -139,6 +156,7 @@ view: ticket {
     }
   }
   dimension: Platform {
+    description: "Custom ticket categories grouped by different LI platform"
     case: {
       when: {
         sql:${custom_ticket_categories} IN("onboard__account_error", "onboard__change_of_contact", "onboard__check_in", "onboard__contact_request", "onboard__data_error","onboard__exemption", "onboard__expo", "onboard__image_processing_issues", "onboard__image_provider", "onboard__image_requirements", "onboard__li_initiative_overview", "onboard__other", "onboard__portal_navigation", "onboard__registration_error", "onboard__submission_confirmation", "onboard__submission_portal_error", "onboard__third_party_questions", "onboard__updating_data");;
@@ -164,13 +182,13 @@ view: ticket {
   }
 
   dimension: priority {
+    description: "The urgency with which the ticket should be addressed. Possible values: urgent, high, normal, low"
     type: string
     sql: case when LOWER(${TABLE}.priority) = 'low' then '2 - Low'
           when LOWER(${TABLE}.priority) = 'normal' then '3 - Normal'
           when LOWER(${TABLE}.priority) = 'high' then '4 - High'
           when LOWER(${TABLE}.priority) = 'urgent' then '5 - Urgent'
           when LOWER(${TABLE}.priority) is null then '1 - Not Assigned' end ;;
-    description: "The urgency with which the ticket should be addressed. Possible values: urgent, high, normal, low"
     html: {% if value == '1 - Not Assigned' %}
             <div style="color: black; background-color: grey; font-size:100%; text-align:center">{{ rendered_value }}</div>
           {% elsif value == '2 - Low' %}
@@ -188,32 +206,37 @@ view: ticket {
   }
 
   dimension: recipient {
+    description: "Recipient of a Zendesk ticket."
     type: string
     sql: ${TABLE}.recipient ;;
   }
 
   dimension: status {
+    description: "The state of the ticket. Possible values: closed, deleted, hold, open, pending, and solved."
     type: string
     sql: ${TABLE}.status ;;
-    description: "The state of the ticket"
   }
 
   dimension: subject {
+    description: "Subject within a specific Zendesk ticket filled out by the ticket submitter."
     type: string
     sql: ${TABLE}.subject ;;
   }
 
   dimension: type {
+    description: "If applicable, Zendesk ticket type. Possible values: task, question, problem, and incident."
     type: string
     sql: ${TABLE}.`type` ;;
   }
 
   dimension: url {
+    description: "The URL which the Zendesk ticket was created on within the platform."
     type: string
     sql: ${TABLE}.url ;;
   }
 
   dimension: via_channel {
+    description: "Channel where the Zendesk ticket was submitted. Possible values: api, web, chat, email, and mobile."
     type: string
     sql: ${TABLE}.via_channel ;;
   }
@@ -230,6 +253,7 @@ view: ticket {
 
   # ----- date attributes ------
   dimension_group: created {
+    description: "Time at which the Zendesk ticket was created."
     type: time
     timeframes: [
       raw,
@@ -253,6 +277,7 @@ view: ticket {
   }
 
   dimension_group: last_updated {
+    description: "Time since Zendesk ticket was updated."
     type: time
     timeframes: [
       raw,
@@ -267,6 +292,7 @@ view: ticket {
   }
 
   dimension_group: due {
+    description: "Description of issue within Zendesk ticket."
     type: time
     timeframes: [
       raw,
@@ -278,6 +304,19 @@ view: ticket {
       year
     ]
     sql: ${TABLE}.due_at ;;
+  }
+  dimension: custom_time_spent_last_update_sec_ {
+    description: "Active time spent solving Zendesk ticket since last update."
+    type: number
+    sql: ${TABLE}.custom_time_spent_last_update_sec_ ;;
+    group_label: "Time Tracking"
+  }
+
+  dimension: custom_total_time_spent_sec_ {
+    description: "Active time spent solving Zendesk ticket, in total."
+    type: number
+    sql: ${TABLE}.custom_total_time_spent_sec_ ;;
+    group_label: "Time Tracking"
   }
 
   # ----- looker fields -----
@@ -326,6 +365,7 @@ view: ticket {
     type: average
     sql: ${days_to_solve} ;;
     value_format_name: decimal_2
+    hidden: yes
   }
 
   dimension: avg_business_days_to_solve {
@@ -334,13 +374,116 @@ view: ticket {
   -((EXTRACT(WEEK FROM ${ticket_history_facts.solved_date}) - EXTRACT(WEEK FROM ${created_date})) * 2)
   -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${created_date}) = 1 THEN 1 ELSE 0 END)
   -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${ticket_history_facts.solved_date}) = 7 THEN 1 ELSE 0 END) ;;
+    hidden: yes
   }
+
   measure: avg_bus_days_to_solve {
+    description: "Average business days (M-F, 8 hour days) to solve an issue"
     type: average
     sql: ${avg_business_days_to_solve} ;;
     value_format_name: decimal_2
+  }
 
-}
+  dimension: custom_asana_ticket {
+    description: "If applicable, Asana ticket URL associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_asana_ticket ;;
+  }
+
+  dimension: custom_customer {
+    description: "If applicable, customer associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_customer ;;
+  }
+
+  dimension: custom_data_type {
+    description: "If applicable, data type associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_data_type ;;
+  }
+
+  dimension: custom_expected_value {
+    description: "If applicable, expected value associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_expected_value ;;
+  }
+
+  dimension: custom_feid_s_ {
+    label: "Custom FEIDs"
+    description: "If applicable, feid's associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_feid_s_ ;;
+  }
+
+  dimension: custom_product {
+    description: "If applicable, product associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_product ;;
+  }
+
+  dimension: custom_product_attribute {
+    description: "If applicable, product attribute associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_product_attribute ;;
+  }
+
+  dimension: custom_product_description {
+    description: "If applicable, product description associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_product_description ;;
+  }
+
+  dimension: custom_product_field {
+    description: "If applicable, product field associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_product_field ;;
+  }
+
+  dimension: custom_product_type {
+    description: "If applicable, product type associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_product_type ;;
+  }
+
+  dimension: custom_smart_label_type {
+    description: "Smart label type associated with the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_smart_label_type ;;
+  }
+
+  dimension: custom_solved_solely_by_css {
+    description: "If applicable, if ticket was able to be solved solely by CSS."
+    type: yesno
+    sql: ${TABLE}.custom_solved_solely_by_css ;;
+  }
+
+  dimension:solved_by_department {
+    description: "If applicable, if ticket was solved by either the Data, CSS, or Engineering team"
+    case: {
+      when: {
+        sql: ${custom_asana_ticket} IS NOT NULL;;
+        label: "Data"
+      }
+      when: {
+        sql: ${custom_solved_solely_by_css}= TRUE;;
+        label: "CSS"
+      }
+      when: {
+        sql: ${created_date}<CAST("2018-03-01" AS DATE);;
+        label: "Unknown"
+        #Previous to March 1st, Label Insight used Freshdesk to answer tickets, which did not have department options
+      }else: "Engineering"
+    }
+  }
+
+  dimension: custom_upc_s_ {
+    label: "Custom UPCs"
+    description: "If applicable, the UPC provided within the Zendesk ticket."
+    type: string
+    sql: ${TABLE}.custom_upc_s_ ;;
+    group_label: "Ticket Information"
+  }
+
   dimension: is_backlogged {
     type: yesno
     sql: ${status} = 'pending' ;;
@@ -455,18 +598,21 @@ view: ticket {
   }
 
   dimension: requester_id {
+    description: "Recipient ID of an incoming Zendesk ticket."
     type: number
     hidden: yes
     sql: ${TABLE}.requester_id ;;
   }
 
   dimension: submitter_id {
+    description: "The Submitter's ID associated with a Zendesk ticket."
     type: number
     hidden: yes
     sql: ${TABLE}.submitter_id ;;
   }
 
   dimension: ticket_form_id {
+    description: "The ticket form ID associated with a Zendesk ticket."
     type: number
     hidden: yes
     sql: ${TABLE}.ticket_form_id ;;
@@ -479,6 +625,7 @@ view: ticket {
   }
 
   dimension: external_id {
+    description: "External ID associated with a Zendesk ticket."
     type: string
     hidden: yes
     sql: ${TABLE}.external_id ;;
@@ -491,6 +638,7 @@ view: ticket {
   }
 
   dimension: group_id {
+    description: "Group ID associated with a Zendesk ticket."
     type: number
     hidden: yes
     sql: ${TABLE}.group_id ;;
@@ -521,6 +669,7 @@ view: user {
   }
 
   dimension: organization_id {
+    description: "The unique identifier associated with a specific organization."
     type: number
     hidden: yes
     sql: ${TABLE}.organization_id ;;
@@ -1232,6 +1381,7 @@ view: ticket_assignee_facts {
   dimension: assignee_id {
     primary_key: yes
     sql: ${TABLE}.assignee_id ;;
+    description: "Unique ID for the assignee of the Zendesk ticket."
     hidden: yes
   }
 
