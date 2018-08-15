@@ -56,6 +56,14 @@ view: ticket {
         label:  "API"
       }
       when: {
+        sql: ${custom_ticket_categories} = "onboard__missing_product_" ;;
+        label:  "Missing Product"
+      }
+      when: {
+        sql: ${custom_ticket_categories} =  "onboard__updating_data" ;;
+        label: "Updating Data"
+      }
+      when: {
         sql: ${custom_ticket_categories} IN("publish__bug__p3s2", "publish__bug__p2s3","publish__bug__p3s3","publish__bug__p2s2","explore__bug","explore__bug__p2s2","capture__bug");;
         label: "Bug"
       }
@@ -72,7 +80,7 @@ view: ticket {
         label: "Account Error"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("data_request", "onboard__updating_data","explore__data_request","capture__data_request");;
+        sql: ${custom_ticket_categories} IN("data_request","explore__data_request","capture__data_request");;
         label: "Data Request"
       }
       when: {
@@ -88,7 +96,11 @@ view: ticket {
         label: "Feature Request/Product Feedback"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("onboard__image_processing_issues","capture__image_issues");;
+        sql: ${custom_ticket_categories}= "onboard__image_processing_issues";;
+        label: "Image Processing Issues"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__image_issues";;
         label: "Image Issues"
       }
       when: {
@@ -116,12 +128,12 @@ view: ticket {
         label: "Platform Downtime"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("onboard__portal_navigation");;
+        sql: ${custom_ticket_categories} IN("onboard__portal_navigation","onboard__portal_navigation__timeline_questions", "onboard__portal_navigation__products_with_issues", "onboard__portal_navigation__products_ready_for_processing");;
         label: "Portal Navigation"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__registration_error";;
-        label: "Registration"
+        label: "Registration Error"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__submission_portal_error";;
@@ -132,20 +144,29 @@ view: ticket {
         label: "Third Party Questions"
       }
       when: {
+        sql: ${custom_ticket_categories}= "onboard__change_of_contact";;
+        label: "Change of Contact"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__contact_request";;
+        label: "Contact Request"
+      }
+      when: {
         sql: ${custom_ticket_categories} IN("training_gap","explore__training_gap","capture__training_gap");;
         label: "Training Gap"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("user_permissions_and_admin","onboard__change_of_contact","onboard__contact_request","explore__user_permissions_and_admin","capture__user_permissions_and_admin");;
+        sql: ${custom_ticket_categories} IN("user_permissions_and_admin","explore__user_permissions_and_admin","capture__user_permissions_and_admin");;
         label: "User Permissions and Admin"
       }
     }
   }
+
   dimension: Platform {
     description: "Custom ticket categories grouped by different LI platform"
     case: {
       when: {
-        sql:${custom_ticket_categories} IN("onboard__account_error", "onboard__change_of_contact", "onboard__check_in", "onboard__contact_request", "onboard__data_error","onboard__exemption", "onboard__expo", "onboard__image_processing_issues", "onboard__image_provider", "onboard__image_requirements", "onboard__li_initiative_overview", "onboard__other", "onboard__portal_navigation", "onboard__registration_error", "onboard__submission_confirmation", "onboard__submission_portal_error", "onboard__third_party_questions", "onboard__updating_data");;
+        sql:${custom_ticket_categories} IN("onboard__account_error", "onboard__change_of_contact", "onboard__check_in", "onboard__contact_request", "onboard__data_error","onboard__exemption", "onboard__expo", "onboard__image_processing_issues", "onboard__image_provider", "onboard__image_requirements", "onboard__li_initiative_overview", "onboard__other", "onboard__portal_navigation", "onboard__portal_navigation__timeline_questions", "onboard__portal_navigation__products_with_issues", "onboard__portal_navigation__products_ready_for_processing", "onboard__missing_products_" "onboard__registration_error", "onboard__submission_confirmation", "onboard__submission_portal_error", "onboard__third_party_questions", "onboard__updating_data");;
         label: "Onboard"
       }
       when: {
@@ -564,6 +585,7 @@ view: ticket {
     fields: [
       id,
       organization.name,
+      custom_ticket_categories,
       subject,
       ticket_comment.body,
     ]
