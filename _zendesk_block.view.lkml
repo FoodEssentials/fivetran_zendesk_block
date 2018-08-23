@@ -425,10 +425,10 @@ view: ticket {
 
   dimension: avg_business_days_to_solve {
     type: number
-    sql: ((UNIX_DATE(${ticket_history_facts.solved_date}) - UNIX_DATE(${created_date})) + 1)
+    sql: (((UNIX_DATE(${ticket_history_facts.solved_date}) - UNIX_DATE(${created_date})) + 1)
   -((EXTRACT(WEEK FROM ${ticket_history_facts.solved_date}) - EXTRACT(WEEK FROM ${created_date})) * 2)
   -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${created_date}) = 1 THEN 1 ELSE 0 END)
-  -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${ticket_history_facts.solved_date}) = 7 THEN 1 ELSE 0 END) ;;
+  -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${ticket_history_facts.solved_date}) = 7 THEN 1 ELSE 0 END)/3);;
     hidden: yes
     group_label: "Ticket Resolution"
   }
