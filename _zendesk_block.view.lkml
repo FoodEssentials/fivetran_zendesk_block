@@ -395,7 +395,7 @@ view: ticket {
 
   dimension: hours_to_solve {
     type: number
-    sql: 1.00 * DATETIME_DIFF(${ticket_history_facts.solved_raw}, ${created_raw}, HOUR) ;;
+    sql: 1.00 * TIMESTAMP_DIFF(${ticket_history_facts.solved_raw}, ${created_raw}, HOUR) ;;
     group_label: "Ticket Progress"
   }
 
