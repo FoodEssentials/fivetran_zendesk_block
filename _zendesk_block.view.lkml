@@ -448,6 +448,7 @@ view: ticket {
   }
 
   dimension: weekdays_to_solve_decimal {
+    type: number
     description: "The number of weekday hours it took to solve a time divided by 24."
     sql: ROUND(${hours_to_solve_weekdays}/24,2) ;;
 
