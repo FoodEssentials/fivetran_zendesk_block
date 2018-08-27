@@ -422,26 +422,6 @@ view: ticket {
     group_label: "Task Completion Time"
   }
 
-  dimension: weekdays_to_solve_decimal {
-    type: number
-    description: "The number of weekday hours it took to solve a time divided by 24."
-    sql: ROUND(${hours_to_solve_weekdays}/24,2) ;;
-
-  }
-
-  dimension: hours_to_solve_weekdays {
-    description: "The number of hours it took to solve the ticket not counting Saturday and Sunday."
-    type: number
-    sql:
-      TIMESTAMP_DIFF( ${ticket_history_facts.solved_raw}, ${created_raw}, HOUR ) - ( FLOOR( TIMESTAMP_DIFF( ${ticket_history_facts.solved_raw}, ${created_raw}, HOUR ) / 168 ) * 24 )
-      - CASE WHEN ${created_day_of_week_index} - ${ticket_history_facts.solved_day_of_week_index} IN (1, 2, 3, 4, 5) AND ${ticket_history_facts.solved_day_of_week_index} != 6 THEN 48 ELSE 0 END
-      - CASE WHEN ${created_day_of_week_index} != 6 AND ${ticket_history_facts.solved_day_of_week_index} = 6 THEN 24 ELSE 0 END
-      - CASE WHEN ${created_day_of_week_index} = 6 AND ${ticket_history_facts.solved_day_of_week_index} != 6 THEN 24 ELSE 0 END
-      ;;
-    value_format_name: decimal_0
-    group_label: "Task Completion Time"
-  }
-
   dimension: custom_asana_ticket {
     label: "Asana Ticket"
     description: "If applicable, Asana ticket URL associated with the Zendesk ticket."
