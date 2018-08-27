@@ -336,27 +336,12 @@ view: ticket {
     ]
     sql: ${TABLE}.due_at ;;
   }
-  dimension: custom_time_spent_last_update_sec_ {
-    label: "Time Spent Last Update Sec"
-    description: "Active seconds spent solving Zendesk ticket since last update."
-    type: number
-    sql: ${TABLE}.custom_time_spent_last_update_sec_ ;;
-    group_label: "Time Tracking"
-  }
-
-  dimension: custom_total_time_spent_sec_ {
-    label: "Total Time Spent Sec"
-    description: "Active seconds spent solving Zendesk ticket, in total."
-    type: number
-    sql: ${TABLE}.custom_total_time_spent_sec_ ;;
-    group_label: "Time Tracking"
-  }
 
   dimension: time_spent_last_update_min {
     label: "Time Spent Last Update Min"
     description: "Active minutes spent solving Zendesk ticket since last update."
     type: number
-    sql: ${custom_time_spent_last_update_sec_}/60;;
+    sql: ${TABLE}.custom_time_spent_last_update_sec_/60;;
     group_label: "Time Tracking"
   }
 
@@ -364,7 +349,7 @@ view: ticket {
     label: "Total Time Spent Min"
     description: "Active minutes spent solving Zendesk ticket, in total."
     type: number
-    sql: ${custom_total_time_spent_sec_}/60 ;;
+    sql: ${TABLE}.custom_total_time_spent_sec_/60 ;;
     group_label: "Time Tracking"
   }
 
@@ -424,16 +409,6 @@ view: ticket {
     hidden: yes
   }
 
-  dimension: avg_business_days_to_solve {
-    type: number
-    sql: (((UNIX_DATE(${ticket_history_facts.solved_date}) - UNIX_DATE(${created_date})) + 1)
-  -((EXTRACT(WEEK FROM ${ticket_history_facts.solved_date}) - EXTRACT(WEEK FROM ${created_date})) * 2)
-  -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${created_date}) = 1 THEN 1 ELSE 0 END)
-  -(CASE WHEN EXTRACT(DAYOFWEEK FROM ${ticket_history_facts.solved_date}) = 7 THEN 1 ELSE 0 END)/3);;
-    hidden: yes
-    group_label: "Ticket Resolution"
-  }
-
   dimension: weekdays_to_solve {
     description: "The number of days it took to solve the ticket not counting Saturday and Sunday."
     type: number
@@ -464,14 +439,6 @@ view: ticket {
       ;;
     value_format_name: decimal_0
     group_label: "Task Completion Time"
-  }
-
-  measure: avg_bus_days_to_solve {
-    description: "Average business days (M-F, 8 hour days) to solve an issue"
-    type: average
-    sql: ${avg_business_days_to_solve} ;;
-    value_format_name: decimal_2
-    group_label: "Ticket Resolution"
   }
 
   dimension: custom_asana_ticket {
