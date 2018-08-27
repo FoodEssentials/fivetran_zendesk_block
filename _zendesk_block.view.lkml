@@ -307,6 +307,7 @@ view: ticket {
   }
 
   dimension_group: last_updated {
+    group_label: "Status Dates"
     description: "Time since Zendesk ticket was updated."
     type: time
     timeframes: [
@@ -411,6 +412,7 @@ view: ticket {
 
   dimension: weekdays_to_solve {
     description: "The number of days it took to solve the ticket not counting Saturday and Sunday."
+    group_label: "Status Dates"
     type: number
     sql:
       DATE_DIFF( ${ticket_history_facts.solved_date}, ${created_date}, DAY ) - ( FLOOR( DATE_DIFF( ${ticket_history_facts.solved_date}, ${created_date}, DAY ) / 7 ) * 2 )
@@ -419,7 +421,7 @@ view: ticket {
       - CASE WHEN ${created_day_of_week_index} = 6 AND ${ticket_history_facts.solved_day_of_week_index} != 6 THEN 1 ELSE 0 END
       ;;
     value_format_name: decimal_0
-    group_label: "Task Completion Time"
+
   }
 
   dimension: custom_asana_ticket {
