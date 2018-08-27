@@ -403,13 +403,6 @@ view: ticket {
       ;;
   }
 
-  measure: avg_days_to_solve {
-    type: average
-    sql: ${days_to_solve} ;;
-    value_format_name: decimal_2
-    hidden: yes
-  }
-
   dimension: weekdays_to_solve {
     description: "The number of days it took to solve the ticket not counting Saturday and Sunday."
     group_label: "Status Dates"
@@ -586,6 +579,14 @@ view: ticket {
        ;;
   }
 
+  # ----- measures ------
+  measure: avg_days_to_solve {
+    type: average
+    sql: ${days_to_solve} ;;
+    value_format_name: decimal_2
+    hidden: yes
+  }
+
   measure: count_backlogged_tickets {
     group_label: "Status Counts"
     type: count
@@ -632,9 +633,8 @@ view: ticket {
     value_format_name: decimal_0
   }
 
-
-  # ----- measures ------
   measure: count {
+    label: "Count Distint Tickets"
     group_label: "Distinct Ticket Count"
     type: count
     drill_fields: [detail*]
@@ -755,6 +755,8 @@ view: user {
   }
 
   measure: count {
+    label: "Count Distinct Users"
+    description: "A number of distinct Zendesk users, including assignee, commenter, and requester."
     type: count
     drill_fields: [detail*]
   }
@@ -939,6 +941,8 @@ view: ticket_comment {
   }
 
   measure: count {
+    label: "Count Distinct Ticket Comments"
+    description: "Number of distinct Zendesk ticket comments."
     type: count
     drill_fields: [ticket.id, commenter.name, commenter.is_internal, public, created_time, comment_sequence, body]
   }
@@ -1021,6 +1025,8 @@ view: organization {
   }
 
   measure: count {
+    label: "Count Distinct Organizations"
+    description: "Number of distinct organizations."
     type: count
     drill_fields: [detail*]
   }
