@@ -420,7 +420,6 @@ view: ticket {
       - CASE WHEN ${created_day_of_week_index} != 6 AND ${ticket_history_facts.solved_day_of_week_index} = 6 THEN 1 ELSE 0 END
       - CASE WHEN ${created_day_of_week_index} = 6 AND ${ticket_history_facts.solved_day_of_week_index} != 6 THEN 1 ELSE 0 END
       ;;
-    value_format_name: decimal_0
   }
 
   dimension: custom_asana_ticket {
