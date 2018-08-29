@@ -455,6 +455,7 @@ view: ticket {
   # }
 
   dimension: business_hours {
+    hidden: yes
     type:  number
     sql: CASE
           WHEN ${created_day_of_week_index} IN (5, 6) AND ${ticket_history_facts.solved_day_of_week_index} IN (5, 6)
@@ -478,6 +479,18 @@ view: ticket {
                                            ELSE 8
                                            END
           END;;
+  }
+
+  measure: average_business_hours {
+    type: average
+    sql: ${business_hours} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: average_business_days {
+    type: average
+    sql: ${business_hours}/8 ;;
+    value_format_name: decimal_2
   }
 
   dimension: custom_asana_ticket {
