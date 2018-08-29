@@ -126,8 +126,8 @@ view: ticket {
         label: "Initiative Overview"
       }
       when: {
-        sql: ${custom_ticket_categories}= "internal_request";;
-        label: "Internal Request"
+        sql: ${custom_ticket_categories}= "internal_requests";;
+        label: "Internal Requests"
       }
       when: {
         sql: ${custom_ticket_categories} IN("publish__other", "publish__unknown", "onboard__other","explore__other", "capture__other", "capture__unknown");;
@@ -181,6 +181,10 @@ view: ticket {
         sql: ${custom_ticket_categories} IN("user_permissions_and_admin","explore__user_permissions_and_admin","capture__user_permissions_and_admin");;
         label: "User Permissions and Admin"
       }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues";;
+        label: "Snap Issues"
+      }
     }
   }
 
@@ -207,6 +211,10 @@ view: ticket {
       when: {
         sql:${custom_ticket_categories} IN("api","internal_requests");;
         label: "Other"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues" ;;
+        label: "Snap"
       }
     }
   }
