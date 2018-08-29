@@ -415,6 +415,51 @@ view: ticket {
       ;;
   }
 
+  dimension_group: start {
+    type: time
+    timeframes: [raw, date, time, day_of_week_index, week_of_year, hour_of_day, hour, minute, quarter, time_of_day]
+    sql: ${TABLE}.created;;
+  }
+
+  dimension_group: stop {
+    type: time
+    timeframes: [raw, date, time, day_of_week_index, week_of_year, hour_of_day, hour, minute, quarter, time_of_day]
+    sql: ${TABLE}.solved ;;
+  }
+
+  dimension: work_days {
+    sql: DATEDIFF(DAY, ${start_date}, ${stop_date}) - ((FLOOR(DATEDIFF(DAY, ${start_date}, ${stop_date}) / 7) * 2) +
+    CASE WHEN ${start_day_of_week_index}-${stop_day_of_week_index} IN (1, 2, 3, 4, 5) AND ${stop_day_of_week_index} != 0
+    THEN 2 ELSE 0 END + CASE WHEN ${start_day_of_week_index} != 0 AND ${stop_day_of_week_index} = 0 THEN 1 ELSE 0 END +
+    CASE WHEN ${start_day_of_week_index} = 0 AND ${stop_day_of_week_index} != 0 THEN 1 ELSE 0 END) ;;
+  }
+
+  dimension: business_hours {
+    type:  number
+    sql: (CASE
+          WHEN (${start_day_of_week_index} IN (0, 6)) AND (${stop_day_of_week_index} IN (0, 6))
+            THEN ${work_days}*8
+          WHEN (${start_day_of_week_index} IN (0, 6)) AND (${stop_day_of_week_index} NOT IN (0, 6))
+            THEN ((${work_days}days})*8 + CASE WHEN ${stop_hour_of_day} < 9 THEN 0
+                                         WHEN ${stop_hour_of_day} >=9 AND ${stop_hour_of_day} <= 17 THEN ${stop_hour_of_day}-9
+                                         ELSE 8
+                                         END)
+          WHEN (${start_day_of_week_index} NOT IN (0, 6)) AND (${stop_day_of_week_index} IN (0, 6))
+            THEN ((${work_days} - 1)*8 + CASE WHEN ${start_hour_of_day} < 9 THEN 8
+                                             WHEN ${start_hour_of_day} >= 9 AND ${start_hour_of_day} <= 17 THEN 17-${start_hour_of_day}
+                                             ELSE 0
+                                             END)
+          ELSE ((${work_days} - 1)*8 + CASE WHEN ${start_hour_of_day} < 9 THEN 8
+                                           WHEN ${start_hour_of_day} >= 9 AND ${start_hour_of_day} <= 17 THEN 17-${start_hour_of_day}
+                                           ELSE 0
+                                           END +
+                                      CASE WHEN ${stop_hour_of_day} < 9 THEN 0
+                                           WHEN ${stop_hour_of_day} >=9 AND ${stop_hour_of_day} <= 17 THEN ${stop_hour_of_day}-9
+                                           ELSE 8
+                                           END)))
+          END;;
+  }
+
   dimension: custom_asana_ticket {
     label: "Asana Ticket"
     description: "If applicable, Asana ticket URL associated with the Zendesk ticket."
