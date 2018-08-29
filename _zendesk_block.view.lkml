@@ -138,8 +138,20 @@ view: ticket {
         label: "Platform Downtime"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("onboard__portal_navigation","onboard__portal_navigation__timeline_questions", "onboard__portal_navigation__products_with_issues", "onboard__portal_navigation__products_ready_for_processing");;
-        label: "Portal Navigation"
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation";;
+        label: "Portal Navigation - Before Subcategories"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation__timeline_questions" ;;
+        label: "Portal Navigation - Timeline Questions"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation__products_with_issues" ;;
+        label: "Portal Navigation - Products with Issues"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation__products_ready_for_processing" ;;
+        label: "Portal Navigation - Products Ready for Processing"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__registration_error";;
