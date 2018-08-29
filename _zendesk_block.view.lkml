@@ -295,7 +295,7 @@ view: ticket {
       quarter,
       year
     ]
-    sql: ${TABLE}.created_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.created_at, "America/Chicago")) ;;
   }
 
   dimension: create_time_of_day_tier {
@@ -415,48 +415,48 @@ view: ticket {
       ;;
   }
 
-  dimension_group: start {
-    type: time
-    timeframes: [raw, date, time, day_of_week_index, week_of_year, hour_of_day, hour, minute, quarter, time_of_day]
-    sql: ${TABLE}.created;;
-  }
+  # dimension_group: start {
+  #   type: time
+  #   timeframes: [raw, date, time, day_of_week_index, week_of_year, hour_of_day, hour, minute, quarter, time_of_day]
+  #   sql: ${TABLE}.created;;
+  # }
 
-  dimension_group: stop {
-    type: time
-    timeframes: [raw, date, time, day_of_week_index, week_of_year, hour_of_day, hour, minute, quarter, time_of_day]
-    sql: ${TABLE}.solved ;;
-  }
+  # dimension_group: stop {
+  #   type: time
+  #   timeframes: [raw, date, time, day_of_week_index, week_of_year, hour_of_day, hour, minute, quarter, time_of_day]
+  #   sql: ${ticket_history_facts.solved_date} ;;
+  # }
 
-  dimension: work_days {
-    sql: DATEDIFF(DAY, ${start_date}, ${stop_date}) - ((FLOOR(DATEDIFF(DAY, ${start_date}, ${stop_date}) / 7) * 2) +
-    CASE WHEN ${start_day_of_week_index}-${stop_day_of_week_index} IN (1, 2, 3, 4, 5) AND ${stop_day_of_week_index} != 0
-    THEN 2 ELSE 0 END + CASE WHEN ${start_day_of_week_index} != 0 AND ${stop_day_of_week_index} = 0 THEN 1 ELSE 0 END +
-    CASE WHEN ${start_day_of_week_index} = 0 AND ${stop_day_of_week_index} != 0 THEN 1 ELSE 0 END) ;;
-  }
+  # dimension: work_days {
+  #   sql: DATEDIFF(DAY, ${created_date}, ${ticket_history_facts.solved_date}) - ((FLOOR(DATEDIFF(DAY, ${created_date}, ${ticket_history_facts.solved_date}) / 7) * 2) +
+  #         CASE WHEN ${created_day_of_week_index}-${ticket_history_facts.solved_day_of_week_index} IN (1, 2, 3, 4, 5) AND ${ticket_history_facts.solved_day_of_week_index} != 0
+  #         THEN 2 ELSE 0 END + CASE WHEN ${created_day_of_week_index} != 0 AND ${ticket_history_facts.solved_day_of_week_index} = 0 THEN 1 ELSE 0 END +
+  #         CASE WHEN ${created_day_of_week_index} = 0 AND ${ticket_history_facts.solved_day_of_week_index} != 0 THEN 1 ELSE 0 END) ;;
+  # }
 
   dimension: business_hours {
     type:  number
-    sql: (CASE
-          WHEN (${start_day_of_week_index} IN (0, 6)) AND (${stop_day_of_week_index} IN (0, 6))
-            THEN ${work_days}*8
-          WHEN (${start_day_of_week_index} IN (0, 6)) AND (${stop_day_of_week_index} NOT IN (0, 6))
-            THEN ((${work_days}days})*8 + CASE WHEN ${stop_hour_of_day} < 9 THEN 0
-                                         WHEN ${stop_hour_of_day} >=9 AND ${stop_hour_of_day} <= 17 THEN ${stop_hour_of_day}-9
+    sql: CASE
+          WHEN ${created_day_of_week_index} IN (5, 6) AND ${ticket_history_facts.solved_day_of_week_index} IN (5, 6)
+            THEN ${weekdays_to_solve}*8
+          WHEN ${created_day_of_week_index} IN (5, 6) AND ${ticket_history_facts.solved_day_of_week_index} NOT IN (5, 6)
+            THEN (${weekdays_to_solve}*8) + CASE WHEN ${ticket_history_facts.solved_hour_of_day} < 9 THEN 0
+                                         WHEN ${ticket_history_facts.solved_hour_of_day} >=9 AND ${ticket_history_facts.solved_hour_of_day} <= 17 THEN ${ticket_history_facts.solved_hour_of_day}-9
                                          ELSE 8
-                                         END)
-          WHEN (${start_day_of_week_index} NOT IN (0, 6)) AND (${stop_day_of_week_index} IN (0, 6))
-            THEN ((${work_days} - 1)*8 + CASE WHEN ${start_hour_of_day} < 9 THEN 8
-                                             WHEN ${start_hour_of_day} >= 9 AND ${start_hour_of_day} <= 17 THEN 17-${start_hour_of_day}
+                                         END
+          WHEN ${created_day_of_week_index} NOT IN (5, 6) AND ${ticket_history_facts.solved_day_of_week_index} IN (5, 6)
+            THEN ((${weekdays_to_solve} - 1)*8) + CASE WHEN ${created_hour_of_day} < 9 THEN 8
+                                             WHEN ${created_hour_of_day} >= 9 AND ${created_hour_of_day} <= 17 THEN 17-${created_hour_of_day}
                                              ELSE 0
-                                             END)
-          ELSE ((${work_days} - 1)*8 + CASE WHEN ${start_hour_of_day} < 9 THEN 8
-                                           WHEN ${start_hour_of_day} >= 9 AND ${start_hour_of_day} <= 17 THEN 17-${start_hour_of_day}
+                                             END
+          ELSE ((${weekdays_to_solve} - 1)*8) + CASE WHEN ${created_hour_of_day} < 9 THEN 8
+                                           WHEN ${created_hour_of_day} >= 9 AND ${created_hour_of_day} <= 17 THEN 17-${created_hour_of_day}
                                            ELSE 0
                                            END +
-                                      CASE WHEN ${stop_hour_of_day} < 9 THEN 0
-                                           WHEN ${stop_hour_of_day} >=9 AND ${stop_hour_of_day} <= 17 THEN ${stop_hour_of_day}-9
+                                      CASE WHEN ${ticket_history_facts.solved_hour_of_day} < 9 THEN 0
+                                           WHEN ${ticket_history_facts.solved_hour_of_day} >=9 AND ${ticket_history_facts.solved_hour_of_day} <= 17 THEN ${ticket_history_facts.solved_hour_of_day}-9
                                            ELSE 8
-                                           END)))
+                                           END
           END;;
   }
 
@@ -1333,11 +1333,12 @@ view: ticket_history_facts {
       date,
       week,
       day_of_week_index,
+      hour_of_day,
       month,
       quarter,
       year
     ]
-    sql: ${TABLE}.solved ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.solved, "America/Chicago")) ;;
     group_label: "Status Dates"
   }
 
