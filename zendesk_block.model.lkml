@@ -3,6 +3,7 @@ connection: "bigquery"
 include: "*_zendesk_block.view"
 include: "*_zendesk_variables.view"
 include: "*.dashboard"
+include: "/labelinsight/mysql_label_insight_organizations.view.lkml"
 
 explore: ticket {
   join: assignee {
@@ -55,6 +56,12 @@ explore: ticket {
   join: ticket_assignee_facts {
     type: left_outer
     sql_on: ${ticket.assignee_id} = ${ticket_assignee_facts.assignee_id} ;;
+    relationship: many_to_one
+  }
+
+  join: mysql_label_insight_organizations {
+    type: left_outer
+    sql_on: SAFE_CAST(${ticket.external_id} AS NUMERIC) = ${mysql_label_insight_organizations.id} ;;
     relationship: many_to_one
   }
 
