@@ -193,6 +193,10 @@ view: ticket {
         label: "Capture"
       }
       when: {
+        sql: ${custom_ticket_categories} IN("snap_issues");;
+        label: "Snap Issues"
+      }
+      when: {
         sql:${custom_ticket_categories} IN("api","internal_requests");;
         label: "Other"
       }
