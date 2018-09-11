@@ -2,7 +2,7 @@ include: "_zendesk_variables.view"
 
 view: ticket {
   extends: [_variables]
-  sql_table_name: zendesk.ticket ;;
+  sql_table_name: zendesk.ticket;;
 
   # ----- database fields -----
   dimension: id {
@@ -238,7 +238,7 @@ view: ticket {
   dimension: status {
     description: "The state of the ticket. Possible values: closed, deleted, hold, open, pending, and solved."
     type: string
-    sql: ${TABLE}.status ;;
+    sql: ${TABLE}.status;;
     group_label: "Ticket Progress"
   }
 
