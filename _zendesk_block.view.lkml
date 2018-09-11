@@ -66,7 +66,7 @@ view: ticket {
         label:  "API"
       }
       when: {
-        sql: ${custom_ticket_categories} = "onboard__missing_product_" ;;
+        sql: ${custom_ticket_categories} = "onboard__missing_products_" ;;
         label:  "Missing Product"
       }
       when: {
