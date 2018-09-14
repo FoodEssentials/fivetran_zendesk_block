@@ -62,8 +62,11 @@ view: ticket {
     description: "Client-facing ticket categories bucketing custom ticket categories."
     case: {
       when: {
-        sql: ${custom_ticket_categories} = "api" ;;
-        label:  "API"
+        sql: ${custom_ticket_categories} = "api", "api__unknown" ;;
+      }
+      when: {
+        sql:${custom_ticket_categories} = "snap_issues";;
+        label: "Snap Issues"
       }
       when: {
         sql: ${custom_ticket_categories} = "onboard__missing_products_" ;;
@@ -74,7 +77,8 @@ view: ticket {
         label: "Updating Data"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("publish__bug__p3s2", "publish__bug__p2s3","publish__bug__p3s3","publish__bug__p2s2","explore__bug","explore__bug__p2s2","capture__bug");;
+        sql: ${custom_ticket_categories} IN("publish__bug__p1s1","publish__bug__p1s2", "publish__bug__p1s3","publish__bug__p1s4","publish__bug__p2s1", "publish__bug__p2s2", "publish__bug__p2s3","publish__bug__p2s4", "publish__bug__p3s2","publish__bug__p3s3", "publish__bug__p3s4",
+        "explore__bug__p1s1","explore__bug__p1s2", "explore__bug__p1s3", "explore__bug__p1s4","explore__bug__p2s1", "explore__bug__p2s2","explore__bug__p2s3","explore__bug__p2s4", "explore__bug__p3s2", "explore__bug__p3s3","explore__bug__p3s4","capture__bug__p1s1", "capture__bug__p1s2", "capture__bug__p1s3" , "capture__bug__p1s4", "capture__bug__p2s1", "capture__bug__p2s2", "capture__bug__p2s3", "capture__bug__p2s4", "capture__bug__p3s2","capture__bug__p3s3", : );;
         label: "Bug"
       }
       when: {
@@ -177,7 +181,7 @@ view: ticket {
     description: "Custom ticket categories grouped by different LI platform"
     case: {
       when: {
-        sql:${custom_ticket_categories} IN("onboard__account_error", "onboard__change_of_contact", "onboard__check_in", "onboard__contact_request", "onboard__data_error","onboard__exemption", "onboard__expo", "onboard__image_processing_issues", "onboard__image_provider", "onboard__image_requirements", "onboard__li_initiative_overview", "onboard__other", "onboard__portal_navigation", "onboard__portal_navigation__timeline_questions", "onboard__portal_navigation__products_with_issues", "onboard__portal_navigation__products_ready_for_processing", "onboard__missing_products_", "onboard__registration_error", "onboard__submission_confirmation", "onboard__submission_portal_error", "onboard__third_party_questions", "onboard__updating_data");;
+        sql:${custom_ticket_categories} IN("onboard__account_error", "onboard__change_of_contact", "onboard__check_in", "onboard__contact_request", "onboard__data_error","onboard__exemption", "onboard__expo", "onboard__image_processing_issues", "onboard__image_provider", "onboard__image_requirements", "onboard__li_initiative_overview", "onboard__other", "onboard__portal_navigation", "onboard__portal_navigation__timeline_questions", "onboard__portal_navigation__products_with_issues", "onboard__portal_navigation__products_ready_for_processing", "onboard___missing_products_", "onboard__registration_error", "onboard__submission_confirmation", "onboard__submission_portal_error", "onboard__third_party_questions", "onboard__updating_data");;
         label: "Onboard"
       }
       when: {
@@ -197,8 +201,8 @@ view: ticket {
         label: "Snap Issues"
       }
       when: {
-        sql:${custom_ticket_categories} IN("api","internal_requests");;
-        label: "Other"
+        sql:${custom_ticket_categories} IN("api", "api__unknown" ,"internal_requests");;
+        label: "API/Internal Requests"
       }
     }
   }
