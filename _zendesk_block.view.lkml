@@ -126,8 +126,8 @@ view: ticket {
         label: "Initiative Overview"
       }
       when: {
-        sql: ${custom_ticket_categories}= "internal_request";;
-        label: "Internal Request"
+        sql: ${custom_ticket_categories}= "internal_requests";;
+        label: "Internal Requests"
       }
       when: {
         sql: ${custom_ticket_categories} IN("publish__other", "publish__unknown", "onboard__other","explore__other", "capture__other", "capture__unknown");;
@@ -138,8 +138,20 @@ view: ticket {
         label: "Platform Downtime"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("onboard__portal_navigation","onboard__portal_navigation__timeline_questions", "onboard__portal_navigation__products_with_issues", "onboard__portal_navigation__products_ready_for_processing");;
-        label: "Portal Navigation"
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation";;
+        label: "Portal Navigation - Before Subcategories"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation__timeline_questions" ;;
+        label: "Portal Navigation - Timeline Questions"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation__products_with_issues" ;;
+        label: "Portal Navigation - Products with Issues"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation__products_ready_for_processing" ;;
+        label: "Portal Navigation - Products Ready for Processing"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__registration_error";;
@@ -168,6 +180,10 @@ view: ticket {
       when: {
         sql: ${custom_ticket_categories} IN("user_permissions_and_admin","explore__user_permissions_and_admin","capture__user_permissions_and_admin");;
         label: "User Permissions and Admin"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues";;
+        label: "Snap Issues"
       }
     }
   }
@@ -199,6 +215,10 @@ view: ticket {
       when: {
         sql:${custom_ticket_categories} IN("api","internal_requests");;
         label: "Other"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues" ;;
+        label: "Snap"
       }
     }
   }
@@ -299,7 +319,7 @@ view: ticket {
       quarter,
       year
     ]
-    sql: ${TABLE}.created_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.created_at, "America/Chicago")) ;;
   }
 
   dimension: create_time_of_day_tier {
@@ -417,6 +437,64 @@ view: ticket {
       - CASE WHEN ${created_day_of_week_index} != 6 AND ${ticket_history_facts.solved_day_of_week_index} = 6 THEN 1 ELSE 0 END
       - CASE WHEN ${created_day_of_week_index} = 6 AND ${ticket_history_facts.solved_day_of_week_index} != 6 THEN 1 ELSE 0 END
       ;;
+  }
+
+  # dimension_group: start {
+  #   type: time
+  #   timeframes: [raw, date, time, day_of_week_index, week_of_year, hour_of_day, hour, minute, quarter, time_of_day]
+  #   sql: ${TABLE}.created;;
+  # }
+
+  # dimension_group: stop {
+  #   type: time
+  #   timeframes: [raw, date, time, day_of_week_index, week_of_year, hour_of_day, hour, minute, quarter, time_of_day]
+  #   sql: ${ticket_history_facts.solved_date} ;;
+  # }
+
+  # dimension: work_days {
+  #   sql: DATEDIFF(DAY, ${created_date}, ${ticket_history_facts.solved_date}) - ((FLOOR(DATEDIFF(DAY, ${created_date}, ${ticket_history_facts.solved_date}) / 7) * 2) +
+  #         CASE WHEN ${created_day_of_week_index}-${ticket_history_facts.solved_day_of_week_index} IN (1, 2, 3, 4, 5) AND ${ticket_history_facts.solved_day_of_week_index} != 0
+  #         THEN 2 ELSE 0 END + CASE WHEN ${created_day_of_week_index} != 0 AND ${ticket_history_facts.solved_day_of_week_index} = 0 THEN 1 ELSE 0 END +
+  #         CASE WHEN ${created_day_of_week_index} = 0 AND ${ticket_history_facts.solved_day_of_week_index} != 0 THEN 1 ELSE 0 END) ;;
+  # }
+
+  dimension: business_hours {
+    hidden: yes
+    type:  number
+    sql: CASE
+          WHEN ${created_day_of_week_index} IN (5, 6) AND ${ticket_history_facts.solved_day_of_week_index} IN (5, 6)
+            THEN ${weekdays_to_solve}*8
+          WHEN ${created_day_of_week_index} IN (5, 6) AND ${ticket_history_facts.solved_day_of_week_index} NOT IN (5, 6)
+            THEN (${weekdays_to_solve}*8) + CASE WHEN ${ticket_history_facts.solved_hour_of_day} < 9 THEN 0
+                                         WHEN ${ticket_history_facts.solved_hour_of_day} >=9 AND ${ticket_history_facts.solved_hour_of_day} <= 17 THEN ${ticket_history_facts.solved_hour_of_day}-9
+                                         ELSE 8
+                                         END
+          WHEN ${created_day_of_week_index} NOT IN (5, 6) AND ${ticket_history_facts.solved_day_of_week_index} IN (5, 6)
+            THEN ((${weekdays_to_solve} - 1)*8) + CASE WHEN ${created_hour_of_day} < 9 THEN 8
+                                             WHEN ${created_hour_of_day} >= 9 AND ${created_hour_of_day} <= 17 THEN 17-${created_hour_of_day}
+                                             ELSE 0
+                                             END
+          ELSE ((${weekdays_to_solve} - 1)*8) + CASE WHEN ${created_hour_of_day} < 9 THEN 8
+                                           WHEN ${created_hour_of_day} >= 9 AND ${created_hour_of_day} <= 17 THEN 17-${created_hour_of_day}
+                                           ELSE 0
+                                           END +
+                                      CASE WHEN ${ticket_history_facts.solved_hour_of_day} < 9 THEN 0
+                                           WHEN ${ticket_history_facts.solved_hour_of_day} >=9 AND ${ticket_history_facts.solved_hour_of_day} <= 17 THEN ${ticket_history_facts.solved_hour_of_day}-9
+                                           ELSE 8
+                                           END
+          END;;
+  }
+
+  measure: average_business_hours {
+    type: average
+    sql: ${business_hours} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: average_business_days {
+    type: average
+    sql: ${business_hours}/8 ;;
+    value_format_name: decimal_2
   }
 
   dimension: custom_asana_ticket {
@@ -1292,11 +1370,12 @@ view: ticket_history_facts {
       date,
       week,
       day_of_week_index,
+      hour_of_day,
       month,
       quarter,
       year
     ]
-    sql: ${TABLE}.solved ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.solved, "America/Chicago")) ;;
     group_label: "Status Dates"
   }
 
