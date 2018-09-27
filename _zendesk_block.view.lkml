@@ -66,7 +66,7 @@ view: ticket {
         label:  "API"
       }
       when: {
-        sql: ${custom_ticket_categories} = "onboard__missing_product_" ;;
+        sql: ${custom_ticket_categories} = "onboard__missing_products_" ;;
         label:  "Missing Product"
       }
       when: {
@@ -207,6 +207,10 @@ view: ticket {
       when: {
         sql:${custom_ticket_categories} IN("capture__bug", "capture__data_error", "capture__data_request", "capture__feature_request/_product_feedback", "capture__image_issues", "capture__other", "capture__platform_downtime", "capture__training_gap", "capture__unknown", "capture__user_permissions_and_admin");;
         label: "Capture"
+      }
+      when: {
+        sql: ${custom_ticket_categories} IN("snap_issues");;
+        label: "Snap Issues"
       }
       when: {
         sql:${custom_ticket_categories} IN("api","internal_requests");;
