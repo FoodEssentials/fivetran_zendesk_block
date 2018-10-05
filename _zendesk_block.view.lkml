@@ -178,10 +178,6 @@ view: ticket {
         label: "Training Gap"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("user_permissions_and_admin","explore__user_permissions_and_admin","capture__user_permissions_and_admin");;
-        label: "User Permissions and Admin"
-      }
-      when: {
         sql: ${custom_ticket_categories}= "snap_issues";;
         label: "Snap Issues"
       }
@@ -197,15 +193,15 @@ view: ticket {
         label: "Onboard"
       }
       when: {
-        sql:${custom_ticket_categories} IN("data_error", "feature_request/_product_feedback", "platform_downtime", "publish__bug__p2s2", "publish__bug__p2s3", "publish__bug__p3s2" ,"publish__bug__p3s3","data_request", "publish__other", "publish__unknown","user_permissions_and_admin", "training_gap");;
+        sql:${custom_ticket_categories} IN("data_error", "feature_request/_product_feedback", "platform_downtime", "publish__bug__p2s2", "publish__bug__p2s3", "publish__bug__p3s2" ,"publish__bug__p3s3","data_request", "publish__other", "publish__unknown","training_gap");;
         label: "Publish"
       }
       when: {
-        sql:${custom_ticket_categories} IN("explore__bug","explore__bug__p2s2", "explore__data_error", "explore__data_request", "explore__feature_request/_product_feedback", "explore__other", "explore__training_gap", "explore__user_permissions_and_admin");;
+        sql:${custom_ticket_categories} IN("explore__bug","explore__bug__p2s2", "explore__data_error", "explore__data_request", "explore__feature_request/_product_feedback", "explore__other", "explore__training_gap");;
         label: "Explore"
       }
       when: {
-        sql:${custom_ticket_categories} IN("capture__bug", "capture__data_error", "capture__data_request", "capture__feature_request/_product_feedback", "capture__image_issues", "capture__other", "capture__platform_downtime", "capture__training_gap", "capture__unknown", "capture__user_permissions_and_admin");;
+        sql:${custom_ticket_categories} IN("capture__bug", "capture__data_error", "capture__data_request", "capture__feature_request/_product_feedback", "capture__image_issues", "capture__other", "capture__platform_downtime", "capture__training_gap", "capture__unknown");;
         label: "Capture"
       }
       when: {
