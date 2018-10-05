@@ -213,7 +213,7 @@ view: ticket {
         label: "Other"
       }
       when: {
-        sql: ${custom_ticket_categories}= IN("snap_issues","snap_issues__incorrect_thumbnail", "snap_issues__marketing_images_out_of_order","snap_issues__missing_spin_image_in_publish","snap_issues__color_distortion", "snap_issues__blurry_image", "snap_issues__missing_image", "snap_issues__background/_props_not_removed", "snap_issues__poor_propping", "snap_issues__update_shooting_angle", "snap_issues__packaging_flaws___imperfections") ;;
+        sql: ${custom_ticket_categories} IN("snap_issues","snap_issues__incorrect_thumbnail", "snap_issues__marketing_images_out_of_order","snap_issues__missing_spin_image_in_publish","snap_issues__color_distortion", "snap_issues__blurry_image", "snap_issues__missing_image", "snap_issues__background/_props_not_removed", "snap_issues__poor_propping", "snap_issues__update_shooting_angle", "snap_issues__packaging_flaws___imperfections") ;;
         label: "Snap"
       }
     }
