@@ -67,11 +67,11 @@ view: ticket {
       }
       when: {
         sql: ${custom_ticket_categories} = "onboard__missing_products_" ;;
-        label:  "Missing Product"
+        label:  "Onboard - Missing Product"
       }
       when: {
         sql: ${custom_ticket_categories} =  "onboard__updating_data" ;;
-        label: "Updating Data"
+        label: "Onboard - Updating Data"
       }
       when: {
         sql: ${custom_ticket_categories} IN("publish__bug__p3s2", "publish__bug__p2s3","publish__bug__p3s3","publish__bug__p2s2","explore__bug","explore__bug__p2s2","capture__bug");;
@@ -79,7 +79,7 @@ view: ticket {
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__check_in" ;;
-        label: "Check In"
+        label: "Onboard - Check In"
       }
       when: {
         sql: ${custom_ticket_categories} IN("data_error","onboard__data_error","explore__data_error","capture__data_error");;
@@ -87,7 +87,7 @@ view: ticket {
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__account_error" ;;
-        label: "Account Error"
+        label: "Onboard - Account Error"
       }
       when: {
         sql: ${custom_ticket_categories} IN("data_request","explore__data_request","capture__data_request");;
@@ -95,11 +95,11 @@ view: ticket {
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__exemption";;
-        label: "Exemption"
+        label: "Onboard - Exemption"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__expo";;
-        label: "Expo"
+        label: "Onboard - Expo"
       }
       when: {
         sql: ${custom_ticket_categories} IN("feature_request/_product_feedback","explore__feature_request/_product_feedback","capture__feature_request/_product_feedback");;
@@ -107,23 +107,23 @@ view: ticket {
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__image_processing_issues";;
-        label: "Image Processing Issues"
+        label: "Onboard - Image Processing Issues"
       }
       when: {
         sql: ${custom_ticket_categories}= "capture__image_issues";;
-        label: "Image Issues"
+        label: "Capture - Image Issues"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__image_provider";;
-        label: "Image Provider"
+        label: "Onboard - Image Provider"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__image_requirements";;
-        label: "Image Requirements"
+        label: "Onboard - Image Requirements"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__li_initiative_overview";;
-        label: "Initiative Overview"
+        label: "Onboard - Initiative Overview"
       }
       when: {
         sql: ${custom_ticket_categories}= "internal_requests";;
@@ -139,39 +139,39 @@ view: ticket {
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__portal_navigation";;
-        label: "Portal Navigation - Before Subcategories"
+        label: "Onboard - Portal Navigation - Before Subcategories"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__portal_navigation__timeline_questions" ;;
-        label: "Portal Navigation - Timeline Questions"
+        label: "Onboard - Portal Navigation - Timeline Questions"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__portal_navigation__products_with_issues" ;;
-        label: "Portal Navigation - Products with Issues"
+        label: "Onboard - Portal Navigation - Products with Issues"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__portal_navigation__products_ready_for_processing" ;;
-        label: "Portal Navigation - Products Ready for Processing"
+        label: "Onboard - Portal Navigation - Products Ready for Processing"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__registration_error";;
-        label: "Registration Error"
+        label: "Onboard - Registration Error"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__submission_portal_error";;
-        label: "Submission Portal Error"
+        label: "Onboard - Submission Portal Error"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__third_party_questions";;
-        label: "Third Party Questions"
+        label: "Onboard - Third Party Questions"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__change_of_contact";;
-        label: "Change of Contact"
+        label: "Onboard - Change of Contact"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__contact_request";;
-        label: "Contact Request"
+        label: "Onboard - Contact Request"
       }
       when: {
         sql: ${custom_ticket_categories} IN("training_gap","explore__training_gap","capture__training_gap");;
@@ -180,6 +180,66 @@ view: ticket {
       when: {
         sql: ${custom_ticket_categories}= "snap_issues";;
         label: "Snap Issues"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__incorrect_thumbnail" ;;
+        label: "Snap Issues - Incorrect Thumbnail"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__marketing_images_out_of_order" ;;
+        label: "Snap Issues - Marketing Images out of Order"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__missing_spin_image_in_publish" ;;
+        label: "Snap Issues - Missing Spin Image in Publish"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__color_distortion" ;;
+        label: "Snap Issues - Color Distortion"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__blurry_image" ;;
+        label: "Snap Issues - Blurry Image"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__missing_image";;
+        label: "Snap Issues - Missing Image"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__background/_props_not_removed" ;;
+        label: "Snap Issues - Background - Props not Removed"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__poor_propping" ;;
+        label: "Snap Issues - Poor Propping"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__update_shooting_angle" ;;
+        label: "Snap Issues - Update Shooting Angle"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "snap_issues__packaging_flaws___imperfections" ;;
+        label: "Snap Issues - Packaging Flaws & Imperfections"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "admin__user_permissions__product_assignments";;
+        label: "Admin - User Permissions & Product Assignments"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "admin__org_group_configuration";;
+        label: "Admin - Org Group Configuration"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "admin__app_shell";;
+        label: "Admin- App Shell"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "admin__help_center___widget_" ;;
+        label: "Admin - Help Center Widget"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "admin__other" ;;
+        label: "Admin - Other"
       }
     }
   }
