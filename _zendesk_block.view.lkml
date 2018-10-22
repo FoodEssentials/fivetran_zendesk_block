@@ -399,7 +399,7 @@ view: ticket {
       quarter,
       year
     ]
-    sql: ${TABLE}.updated_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.updated_at, "America/Chicago")) ;;
   }
 
   dimension_group: due {
@@ -415,7 +415,7 @@ view: ticket {
       quarter,
       year
     ]
-    sql: ${TABLE}.due_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.due_at, "America/Chicago")) ;;
   }
 
   dimension: time_spent_last_update_min {
@@ -981,7 +981,7 @@ view: requester {
       quarter,
       year
     ]
-    sql: ${TABLE}.last_login_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_login_at, "America/Chicago")) ;;
   }
 
   dimension: notes {
@@ -1037,7 +1037,7 @@ view: ticket_comment {
       quarter,
       year
     ]
-    sql: ${TABLE}.created ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.created, "America/Chicago")) ;;
   }
 
   dimension: public {
@@ -1111,7 +1111,7 @@ view: ticket_field_history {
       quarter,
       year
     ]
-    sql: ${TABLE}.updated ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.updated, "America/Chicago")) ;;
   }
 
   dimension: user_id {
@@ -1241,7 +1241,7 @@ view: group {
       quarter,
       year
     ]
-    sql: ${TABLE}.created_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.created_at, "America/Chicago")) ;;
     hidden: yes
   }
 
@@ -1262,7 +1262,7 @@ view: group {
       quarter,
       year
     ]
-    sql: ${TABLE}.updated_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.updated_at, "America/Chicago")) ;;
     hidden: yes
   }
 }
@@ -1346,7 +1346,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.first_response ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.first_response, "America/Chicago")) ;;
   }
 
   dimension: ticket_id {
@@ -1368,7 +1368,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.last_updated_status ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_updated_status, "America/Chicago")) ;;
   }
 
   dimension_group: updated {
@@ -1382,7 +1382,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.updated ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.updated, "America/Chicago")) ;;
     hidden: yes
     # why is this not = to the field on ticket on some occasions? should be redundant.
     group_label: "Status Dates"
@@ -1399,7 +1399,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.last_updated_by_assignee ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_updated_by_assignee, "America/Chicago")) ;;
     group_label: "Status Dates"
   }
 
@@ -1414,7 +1414,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.last_updated_by_requester ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_updated_by_requester, "America/Chicago")) ;;
     group_label: "Status Dates"
   }
 
@@ -1446,7 +1446,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.initially_assigned ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.initially_assigned, "America/Chicago")) ;;
     group_label: "Status Dates"
   }
 
@@ -1620,13 +1620,13 @@ view: ticket_assignee_facts {
   dimension_group: first_ticket {
     type: time
     timeframes: [time, date, week, month]
-    sql: ${TABLE}.first_ticket ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.first_ticket, "America/Chicago")) ;;
   }
 
   dimension_group: latest_ticket {
     type: time
     timeframes: [time, date, week, month]
-    sql: ${TABLE}.latest_ticket ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.latest_ticket, "America/Chicago")) ;;
   }
 
   dimension: avg_tickets_per_day {
