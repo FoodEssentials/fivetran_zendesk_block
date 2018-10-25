@@ -772,7 +772,7 @@ view: ticket {
   }
 
   measure: count {
-    label: "Count Distint Tickets"
+    label: "Count Distinct Tickets"
     group_label: "Distinct Ticket Count"
     type: count
     drill_fields: [detail*]
