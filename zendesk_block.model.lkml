@@ -69,4 +69,9 @@ explore: ticket {
     sql_on: ${ticket.id} = ${number_of_reopens.ticket_id} ;;
     relationship: one_to_one
   }
+
+  join: ticket_tags {
+    sql_on: ${ticket.id} = ${ticket_tags.ticket_id} ;;
+    relationship: many_to_many
+  }
 }
