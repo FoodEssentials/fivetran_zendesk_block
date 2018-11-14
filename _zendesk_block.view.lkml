@@ -1664,3 +1664,36 @@ view: zendesk_common_term_count {
     sql: ${TABLE}.word ;;
   }
 }
+
+view: ticket_tags {
+  view_label: "Ticket"
+  sql_table_name: zendesk.ticket_tag ;;
+
+# ----- Dimensions -----
+  dimension: tag {
+    group_label: "Basic Ticket Information"
+    description: "A label given to a zendesk ticket. Anything made into a jira ticket automatically has \"jira_escalated\". Tickets can have multiple tags."
+    type: string
+    sql: ${TABLE}.tag ;;
+  }
+
+  dimension: ticket_id {
+    type: number
+    sql: ${TABLE}.ticket_id ;;
+    hidden: yes
+  }
+
+  dimension_group: _fivetran_synced {
+    type: time
+    sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
+  }
+
+# ----- Measures -----
+  measure: tag_list {
+    description: "A comma seperated list of all tags associated with this product."
+    type: list
+    list_field: tag
+    }
+
+}
