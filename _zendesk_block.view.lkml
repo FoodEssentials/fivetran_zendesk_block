@@ -174,6 +174,10 @@ view: ticket {
         label: "Onboard - Contact Request"
       }
       when: {
+        sql: ${custom_ticket_categories}= "onboard__deleting_images_";;
+        label: "Onboard - Deleting Images"
+      }
+      when: {
         sql: ${custom_ticket_categories} IN("training_gap","explore__training_gap","capture__training_gap");;
         label: "Training Gap"
       }
