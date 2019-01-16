@@ -253,33 +253,34 @@ view: ticket {
     description: "Custom ticket categories grouped by different LI platform"
     case: {
       when: {
-        sql:${custom_ticket_categories} IN("onboard__account_error", "onboard__change_of_contact", "onboard__check_in", "onboard__contact_request", "onboard__data_error","onboard__exemption", "onboard__expo", "onboard__image_processing_issues", "onboard__image_provider", "onboard__image_requirements", "onboard__li_initiative_overview", "onboard__other", "onboard__portal_navigation", "onboard__portal_navigation__timeline_questions", "onboard__portal_navigation__products_with_issues", "onboard__portal_navigation__products_ready_for_processing", "onboard__missing_products_", "onboard__registration_error", "onboard__submission_confirmation", "onboard__submission_portal_error", "onboard__third_party_questions", "onboard__updating_data");;
+        sql:${custom_ticket_categories} IN("onboard__account_error", "onboard__change_of_contact", "onboard__check_in", "onboard__contact_request", "onboard__data_error","onboard__exemption", "onboard__expo", "onboard__image_processing_issues", "onboard__image_provider", "onboard__image_requirements", "onboard__li_initiative_overview", "onboard__other", "onboard__portal_navigation", "onboard__portal_navigation__timeline_questions", "onboard__portal_navigation__products_with_issues", "onboard__portal_navigation__products_ready_for_processing", "onboard__missing_products_", "onboard__registration_error", "onboard__submission_confirmation", "onboard__submission_portal_error", "onboard__third_party_questions", "onboard__updating_data", "onboard___missing_products_", "onboard__unknown", "onboard__bug");;
         label: "Onboard"
       }
       when: {
-        sql:${custom_ticket_categories} IN("data_error", "feature_request/_product_feedback", "platform_downtime", "publish__bug__p2s2", "publish__bug__p2s3", "publish__bug__p3s2" ,"publish__bug__p3s3","data_request", "publish__other", "publish__unknown","training_gap");;
+        sql:${custom_ticket_categories} IN("data_error", "feature_request/_product_feedback", "platform_downtime", "publish__bug__p2s2", "publish__bug__p2s3", "publish__bug__p3s2" ,"publish__bug__p3s3","data_request", "publish__other", "publish__unknown","training_gap", "publish__bug__p1s2", "publish__bug__p2s1", "publish__bug__p1s3", "publish__bug__p1s1", "publish__bug__p4s3", "publish__bug__p3s4");;
         label: "Publish"
       }
       when: {
-        sql:${custom_ticket_categories} IN("explore__bug","explore__bug__p2s2", "explore__data_error", "explore__data_request", "explore__feature_request/_product_feedback", "explore__other", "explore__training_gap");;
+        sql:${custom_ticket_categories} IN("explore__bug","explore__bug__p2s2", "explore__data_error", "explore__data_request", "explore__feature_request/_product_feedback", "explore__other", "explore__training_gap", "explore__platform_downtime", "explore__unknown", "explore__bug__p3s3");;
         label: "Explore"
       }
       when: {
-        sql:${custom_ticket_categories} IN("capture__bug", "capture__data_error", "capture__data_request", "capture__feature_request/_product_feedback", "capture__image_issues", "capture__other", "capture__platform_downtime", "capture__training_gap", "capture__unknown");;
+        sql:${custom_ticket_categories} IN("capture__bug", "capture__data_error", "capture__data_request", "capture__feature_request/_product_feedback", "capture__image_issues", "capture__other", "capture__platform_downtime", "capture__training_gap", "capture__unknown", "capture__bug__p2s2", "capture__bug__p2s3", "capture__bug__p1s2");;
         label: "Capture"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("admin__user_permissions__product_assignments", "admin__org_group_configuration", "admin__app_shell", "admin__help_center___widget_", "admin__other");;
+        sql: ${custom_ticket_categories} IN("admin__user_permissions__product_assignments", "admin__org_group_configuration", "admin__app_shell", "admin__help_center___widget_", "admin__other", "admin__product_assignments_", "admin__user_permissions");;
         label: "Admin"
       }
       when: {
         sql:${custom_ticket_categories} IN("api","internal_requests");;
-        label: "Other"
+        label: "API/Internal Requests"
       }
       when: {
         sql: ${custom_ticket_categories} IN("snap_issues","snap_issues__incorrect_thumbnail", "snap_issues__marketing_images_out_of_order","snap_issues__missing_spin_image_in_publish","snap_issues__color_distortion", "snap_issues__blurry_image", "snap_issues__missing_image", "snap_issues__background/_props_not_removed", "snap_issues__poor_propping", "snap_issues__update_shooting_angle", "snap_issues__packaging_flaws___imperfections") ;;
         label: "Snap"
       }
+      else: "Other"
     }
   }
 
@@ -403,7 +404,7 @@ view: ticket {
       quarter,
       year
     ]
-    sql: ${TABLE}.updated_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.updated_at, "America/Chicago")) ;;
   }
 
   dimension_group: due {
@@ -419,7 +420,7 @@ view: ticket {
       quarter,
       year
     ]
-    sql: ${TABLE}.due_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.due_at, "America/Chicago")) ;;
   }
 
   dimension: time_spent_last_update_min {
@@ -776,7 +777,7 @@ view: ticket {
   }
 
   measure: count {
-    label: "Count Distint Tickets"
+    label: "Count Distinct Tickets"
     group_label: "Distinct Ticket Count"
     type: count
     drill_fields: [detail*]
@@ -985,7 +986,7 @@ view: requester {
       quarter,
       year
     ]
-    sql: ${TABLE}.last_login_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_login_at, "America/Chicago")) ;;
   }
 
   dimension: notes {
@@ -1041,7 +1042,7 @@ view: ticket_comment {
       quarter,
       year
     ]
-    sql: ${TABLE}.created ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.created, "America/Chicago")) ;;
   }
 
   dimension: public {
@@ -1115,7 +1116,7 @@ view: ticket_field_history {
       quarter,
       year
     ]
-    sql: ${TABLE}.updated ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.updated, "America/Chicago")) ;;
   }
 
   dimension: user_id {
@@ -1245,7 +1246,7 @@ view: group {
       quarter,
       year
     ]
-    sql: ${TABLE}.created_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.created_at, "America/Chicago")) ;;
     hidden: yes
   }
 
@@ -1266,7 +1267,7 @@ view: group {
       quarter,
       year
     ]
-    sql: ${TABLE}.updated_at ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.updated_at, "America/Chicago")) ;;
     hidden: yes
   }
 }
@@ -1350,7 +1351,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.first_response ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.first_response, "America/Chicago")) ;;
   }
 
   dimension: ticket_id {
@@ -1372,7 +1373,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.last_updated_status ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_updated_status, "America/Chicago")) ;;
   }
 
   dimension_group: updated {
@@ -1386,7 +1387,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.updated ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.updated, "America/Chicago")) ;;
     hidden: yes
     # why is this not = to the field on ticket on some occasions? should be redundant.
     group_label: "Status Dates"
@@ -1403,7 +1404,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.last_updated_by_assignee ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_updated_by_assignee, "America/Chicago")) ;;
     group_label: "Status Dates"
   }
 
@@ -1418,7 +1419,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.last_updated_by_requester ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_updated_by_requester, "America/Chicago")) ;;
     group_label: "Status Dates"
   }
 
@@ -1450,7 +1451,7 @@ view: ticket_history_facts {
       quarter,
       year
     ]
-    sql: ${TABLE}.initially_assigned ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.initially_assigned, "America/Chicago")) ;;
     group_label: "Status Dates"
   }
 
@@ -1624,13 +1625,13 @@ view: ticket_assignee_facts {
   dimension_group: first_ticket {
     type: time
     timeframes: [time, date, week, month]
-    sql: ${TABLE}.first_ticket ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.first_ticket, "America/Chicago")) ;;
   }
 
   dimension_group: latest_ticket {
     type: time
     timeframes: [time, date, week, month]
-    sql: ${TABLE}.latest_ticket ;;
+    sql: TIMESTAMP(DATETIME(${TABLE}.latest_ticket, "America/Chicago")) ;;
   }
 
   dimension: avg_tickets_per_day {
@@ -1667,4 +1668,37 @@ view: zendesk_common_term_count {
     type: string
     sql: ${TABLE}.word ;;
   }
+}
+
+view: ticket_tags {
+  view_label: "Ticket"
+  sql_table_name: zendesk.ticket_tag ;;
+
+# ----- Dimensions -----
+  dimension: tag {
+    group_label: "Basic Ticket Information"
+    description: "A label given to a zendesk ticket. Anything made into a jira ticket automatically has \"jira_escalated\". Tickets can have multiple tags."
+    type: string
+    sql: ${TABLE}.tag ;;
+  }
+
+  dimension: ticket_id {
+    type: number
+    sql: ${TABLE}.ticket_id ;;
+    hidden: yes
+  }
+
+  dimension_group: _fivetran_synced {
+    type: time
+    sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
+  }
+
+# ----- Measures -----
+  measure: tag_list {
+    description: "A comma seperated list of all tags associated with this product."
+    type: list
+    list_field: tag
+    }
+
 }
