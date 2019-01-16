@@ -174,6 +174,18 @@ view: ticket {
         label: "Onboard - Contact Request"
       }
       when: {
+        sql: ${custom_ticket_categories}= "onboarding__upc_request__discontinued_upcs";;
+        label: "Onboard - UPC Request - Discontinued UPCs"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboarding__upc_request__inaccurate_upcs" ;;
+        label: "Onboard - UPC Request - Inaccurate UPCs"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboarding__upc_request__overview/explanation" ;;
+        label: "Onboard - UPC Request - Overview/Explanation"
+      }
+      when: {
         sql: ${custom_ticket_categories}= "onboard__deleting_images_";;
         label: "Onboard - Deleting Images"
       }
