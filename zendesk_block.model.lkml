@@ -3,8 +3,6 @@ connection: "bigquery"
 include: "*_zendesk_block.view"
 include: "*_zendesk_variables.view"
 include: "*.dashboard"
-include: "//labelinsight/mysql_label_insight_users_campaign_choices.view"
-include: "//labelinsight/mysql_label_insight_users2.view"
 include: "//labelinsight/*.view"
 
 
