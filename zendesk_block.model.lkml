@@ -90,7 +90,7 @@ explore: ticket {
           ]
     view_label: "Label Insight: User Profiles"
     sql_on: ${requester.email} = ${mysql_label_insight_users22.email} ;;
-    relationship: many_to_many
+    relationship: many_to_one
   }
 
   join: mysql_label_insight_users_campaign_choices {
