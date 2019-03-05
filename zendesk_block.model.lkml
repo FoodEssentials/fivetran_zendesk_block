@@ -83,6 +83,15 @@ explore: ticket {
   # adding admin data by joining on user email
 
   join: mysql_label_insight_users22 {
+    fields:
+      [mysql_label_insight_users22.full_name,
+        mysql_label_insight_users22.email,
+        mysql_label_insight_users22.email_domain,
+        mysql_label_insight_users22.invitation_last_sent_date,
+        mysql_label_insight_users22.registered_date,
+        mysql_label_insight_users22.registration_completed,
+        mysql_label_insight_users22.company
+          ]
     view_label: "Label Insight: User Profiles"
     sql_on: ${requester.email} = ${mysql_label_insight_users22.email} ;;
     relationship: many_to_many
