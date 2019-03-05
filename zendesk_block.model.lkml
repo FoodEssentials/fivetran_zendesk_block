@@ -5,8 +5,6 @@ include: "*_zendesk_variables.view"
 include: "*.dashboard"
 include: "//labelinsight/*.view"
 
-
-
 explore: ticket {
   join: assignee {
     sql_on: ${ticket.assignee_id} = ${assignee.id} ;;
