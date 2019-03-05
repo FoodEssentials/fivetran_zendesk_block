@@ -4,6 +4,10 @@ include: "*_zendesk_block.view"
 include: "*_zendesk_variables.view"
 include: "*.dashboard"
 include: "//labelinsight/mysql_label_insight_users_campaign_choices.view"
+include: "//labelinsight/mysql_label_insight_users2.view"
+include: "//labelinsight/mysql_label_insight_user_profiles.view"
+
+
 
 explore: ticket {
   join: assignee {
@@ -75,4 +79,12 @@ explore: ticket {
     sql_on: ${ticket.id} = ${ticket_tags.ticket_id} ;;
     relationship: many_to_many
   }
+
+  # adding admin data by joining on user email
+
+  join: mysql_label_insight_user_profiles {
+    sql: ${requester.email} = ${mysql_label_insight_user_profiles.email} ;;
+    relationship: many_to_many
+  }
+
 }
