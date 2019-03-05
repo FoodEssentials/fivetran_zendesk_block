@@ -5,7 +5,7 @@ include: "*_zendesk_variables.view"
 include: "*.dashboard"
 include: "//labelinsight/mysql_label_insight_users_campaign_choices.view"
 include: "//labelinsight/mysql_label_insight_users2.view"
-include: "//labelinsight/mysql_label_insight_user_profiles.view"
+include: "//labelinsight/*.view"
 
 
 
@@ -84,13 +84,12 @@ explore: ticket {
 
   join: mysql_label_insight_users22 {
     view_label: "Label Insight: User Profiles"
-    sql: ${requester.email} = ${mysql_label_insight_users22.email}
-          AND ${mysql_label_insight_users22._fivetran_deleted} = FALSE;;
+    sql_on: ${requester.email} = ${mysql_label_insight_users22.email} ;;
     relationship: many_to_many
   }
 
   join: mysql_label_insight_users_campaign_choices {
-    view_label: "Label Insight: User Profiles"
+    view_label: "User Campaign Choices"
     relationship: one_to_one
     sql_on: ${mysql_label_insight_users22.id} =  ${mysql_label_insight_users_campaign_choices.user_id}
       AND ${mysql_label_insight_users_campaign_choices._fivetran_deleted} = FALSE;;
