@@ -90,7 +90,7 @@ explore: ticket {
   }
 
   join: mysql_label_insight_users_campaign_choices {
-    view_label: "User Campaign Choices"
+    view_label: "Label Insight: User Profiles"
     relationship: one_to_one
     sql_on: ${mysql_label_insight_users22.id} =  ${mysql_label_insight_users_campaign_choices.user_id}
       AND ${mysql_label_insight_users_campaign_choices._fivetran_deleted} = FALSE;;
