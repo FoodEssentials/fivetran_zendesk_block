@@ -89,7 +89,8 @@ explore: ticket {
         mysql_label_insight_users22.company
           ]
     view_label: "Label Insight: User Profiles"
-    sql_on: ${requester.email} = ${mysql_label_insight_users22.email} ;;
+    sql_on: ${requester.email} = ${mysql_label_insight_users22.email}
+            AND ${mysql_label_insight_users22._fivetran_deleted} = FALSE;;
     relationship: many_to_one
   }
 
