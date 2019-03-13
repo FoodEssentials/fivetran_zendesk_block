@@ -62,36 +62,148 @@ view: ticket {
     description: "Client-facing ticket categories bucketing custom ticket categories."
     case: {
       when: {
-        sql: ${custom_ticket_categories} = "api" ;;
+        sql: ${custom_ticket_categories}= "api" ;;
         label:  "API"
       }
       when: {
-        sql: ${custom_ticket_categories} = "onboard__missing_products_" ;;
-        label:  "Onboard - Missing Product"
+        sql: ${custom_ticket_categories}= "api__unknown";;
+        label: "API Unknown"
       }
       when: {
-        sql: ${custom_ticket_categories} =  "onboard__updating_data" ;;
-        label: "Onboard - Updating Data"
+        sql: ${custom_ticket_categories}= "capture__bug__p1s1";;
+      label: "Capture Bug S1-Blocker"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("publish__bug__p3s2", "publish__bug__p2s3","publish__bug__p3s3","publish__bug__p2s2","explore__bug","explore__bug__p2s2","capture__bug");;
-        label: "Bug"
+        sql: ${custom_ticket_categories}= "capture__bug__p1s2";;
+        label: "Capture Bug S2-Critical"
+        }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__bug__p1s3";;
+        label: "Capture Bug S3-Major"
+        }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__bug__p1s4";;
+        label: "Capture Bug S4-Minor"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__check_in" ;;
-        label: "Onboard - Check In"
+        sql: ${custom_ticket_categories}= "capture__bug__p1s5";;
+        label: "Capture Bug S5-Cosmetic"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("data_error","onboard__data_error","explore__data_error","capture__data_error");;
-        label: "Data Error"
+        sql: ${custom_ticket_categories}= "capture__data_error";;
+        label: "Capture - Data Error"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__data_request";;
+        label: "Capture - Data Request"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__feature_request/_product_feedback";;
+        label: "Capture - Feature Request/ Product Feedback"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__image_issues";;
+        label: "Capture - Image Issues"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__platform_downtime";;
+        label: "Capture - Platform Downtime"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__training_gap";;
+        label: "Capture - Training Gap"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "capture__other";;
+        label: "Capture - Other"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__attribute_error";;
+        label: "Explore - Attribute Error"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__bug__p1s1";;
+        label: "Explore Bug S1-Blocker"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__bug__p1s2";;
+        label: "Explore Bug S2-Critical"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__bug__p1s3";;
+        label: "Explore Bug S3-Major"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__bug__p1s4";;
+        label: "Explore Bug S4-Minor"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__bug__p1s5";;
+        label: "Explore Bug S5-Cosmetic"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__data_error";;
+        label: "Explore - Data Error"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__data_request";;
+        label: "Explore - Data Request"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__feature_request/_product_feedback";;
+        label: "Explore - Feature Request/ Product Feedback"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__platform_downtime";;
+        label: "Explore - Platform Downtime"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__training_gap";;
+        label: "Explore - Training Gap"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "explore__other";;
+        label: "Explore - Other"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__account_error" ;;
         label: "Onboard - Account Error"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("data_request","explore__data_request","capture__data_request");;
-        label: "Data Request"
+        sql: ${custom_ticket_categories}= "onboard__bug__s1_-_blocker";;
+        label: "Onboard Bug S1-Blocker"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__bug__s2_-_critical";;
+        label: "Onboard Bug S2-Critical"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__bug__s3_-_major";;
+        label: "Onboard Bug S3-Major"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "onboard__bug__s4_-_minor";;
+        label: "Onboard Bug S4-Minor"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__bug__s5_-_cosmetic";;
+        label: "Onboard Bug S5-Cosmetic"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__change_of_contact";;
+        label: "Onboard - Change of Contact"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__check_in" ;;
+        label: "Onboard - Check In"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__deleting_images_";;
+        label: "Onboard - Deleting Images"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__data_error";;
+        label: "Onboard - Data Error"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__exemption";;
@@ -102,16 +214,12 @@ view: ticket {
         label: "Onboard - Expo"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("feature_request/_product_feedback","explore__feature_request/_product_feedback","capture__feature_request/_product_feedback");;
-        label: "Feature Request/Product Feedback"
+        sql: ${custom_ticket_categories}= "onboard__feature_request/_product_feedback";;
+        label: "Onboard - Feature Request/ Product Feedback"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__image_processing_issues";;
         label: "Onboard - Image Processing Issues"
-      }
-      when: {
-        sql: ${custom_ticket_categories}= "capture__image_issues";;
-        label: "Capture - Image Issues"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__image_provider";;
@@ -123,23 +231,19 @@ view: ticket {
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__li_initiative_overview";;
-        label: "Onboard - Initiative Overview"
+        label: "Onboard - LI Initiative Overview"
       }
       when: {
-        sql: ${custom_ticket_categories}= "internal_requests";;
-        label: "Internal Requests"
+        sql: ${custom_ticket_categories}= "onboard__missing_products_" ;;
+        label:  "Onboard - Missing Product"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("publish__other", "publish__unknown", "onboard__other","explore__other", "capture__other", "capture__unknown","admin__other");;
-        label: "Other"
-      }
-      when: {
-        sql: ${custom_ticket_categories} IN("platform_downtime","capture__platform_downtime");;
-        label: "Platform Downtime"
+        sql: ${custom_ticket_categories}= "onboard__other";;
+        label: "Onboard - Other"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__portal_navigation";;
-        label: "Onboard - Portal Navigation - Before Subcategories"
+        label: "Onboard - Portal Navigation"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__portal_navigation__timeline_questions" ;;
@@ -154,6 +258,18 @@ view: ticket {
         label: "Onboard - Portal Navigation - Products Ready for Processing"
       }
       when: {
+        sql: ${custom_ticket_categories}= "onboarding__upc_request__discontinued_upcs";;
+        label: "Onboard - Requested Products - UPC Request - Discontinued UPCs"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboarding__upc_request__inaccurate_upcs" ;;
+        label: "Onboard - Requested Products - UPC Request - Inaccurate UPCs"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboarding__upc_request__overview/explanation" ;;
+        label: "Onboard - Requested Products- UPC Request - Overview/Explanation"
+      }
+      when: {
         sql: ${custom_ticket_categories}= "onboard__registration_error";;
         label: "Onboard - Registration Error"
       }
@@ -162,40 +278,64 @@ view: ticket {
         label: "Onboard - Submission Portal Error"
       }
       when: {
+        sql: ${custom_ticket_categories}= "onboard__submission_confirmation";;
+        label: "Onboard - Submission Confirmation"
+      }
+      when: {
         sql: ${custom_ticket_categories}= "onboard__third_party_questions";;
         label: "Onboard - Third Party Questions"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__change_of_contact";;
-        label: "Onboard - Change of Contact"
+        sql: ${custom_ticket_categories}= "onboard__updating_data" ;;
+        label: "Onboard - Updating Data"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__contact_request";;
-        label: "Onboard - Contact Request"
+        sql: ${custom_ticket_categories}= "internal_requests";;
+        label: "Internal Requests"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboarding__upc_request__discontinued_upcs";;
-        label: "Onboard - UPC Request - Discontinued UPCs"
+        sql: ${custom_ticket_categories} = "publish__bug__p1s1";;
+        label: "Publish Bug S1-Blocker"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboarding__upc_request__inaccurate_upcs" ;;
-        label: "Onboard - UPC Request - Inaccurate UPCs"
+        sql: ${custom_ticket_categories} = "publish__bug__p1s2";;
+        label: "Publish Bug S2-Critical"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboarding__upc_request__overview/explanation" ;;
-        label: "Onboard - UPC Request - Overview/Explanation"
+        sql: ${custom_ticket_categories} = "publish__bug__p1s3";;
+        label: "Publish Bug S3-Major"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__deleting_images_";;
-        label: "Onboard - Deleting Images"
+        sql: ${custom_ticket_categories} = "publish__bug__p1s4";;
+        label: "Publish Bug S4-Minor"
       }
       when: {
-        sql: ${custom_ticket_categories} IN("training_gap","explore__training_gap","capture__training_gap");;
-        label: "Training Gap"
+        sql: ${custom_ticket_categories} = "publish__bug__p1s5";;
+        label: "Publish Bug S5-Cosmetic"
       }
       when: {
-        sql: ${custom_ticket_categories}= "snap_issues";;
-        label: "Snap Issues"
+        sql: ${custom_ticket_categories} = "publish__data_error";;
+        label: "Publish - Data Error"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "publish__data_request";;
+        label: "Publish - Data Request"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "publish__feature_request/_product_feedback";;
+        label: "Publish - Feature Request/ Product Feedback"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "platform_downtime";;
+        label: "Publish - Platform Downtime"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "publish__training_gap";;
+        label: "Publish - Training Gap"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "publish__other";;
+        label: "Publish - Other"
       }
       when: {
         sql: ${custom_ticket_categories}= "snap_issues__incorrect_thumbnail" ;;
@@ -243,11 +383,31 @@ view: ticket {
       }
       when: {
         sql: ${custom_ticket_categories}= "admin__org_group_configuration";;
-        label: "Admin - Org Group Configuration"
+        label: "Admin - Organization Configuration"
       }
       when: {
         sql: ${custom_ticket_categories}= "admin__app_shell";;
         label: "Admin- App Shell"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "admin__bug__s1_-_blocker";;
+        label: "Admin Bug S1-Blocker"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "admin__bug__s2_-_critical";;
+        label: "Admin Bug S2-Critical"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "admin__bug__s3_-_major";;
+        label: "Admin Bug S3-Major"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "admin__bug__s4_-_minor";;
+        label: "Admin Bug S4-Minor"
+      }
+      when: {
+        sql: ${custom_ticket_categories} = "admin__bug__s5_-_cosmetic";;
+        label: "Admin Bug S5-Cosmetic"
       }
       when: {
         sql: ${custom_ticket_categories}= "admin__help_center___widget_" ;;
