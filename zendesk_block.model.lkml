@@ -3,6 +3,7 @@ connection: "bigquery"
 include: "*_zendesk_block.view"
 include: "*_zendesk_variables.view"
 include: "*.dashboard"
+include: "//labelinsight/*.view"
 
 explore: ticket {
   join: assignee {
@@ -74,4 +75,29 @@ explore: ticket {
     sql_on: ${ticket.id} = ${ticket_tags.ticket_id} ;;
     relationship: many_to_many
   }
+
+  # adding admin data by joining on user email
+
+  join: mysql_label_insight_users22 {
+    fields:
+      [mysql_label_insight_users22.full_name,
+        mysql_label_insight_users22.email_domain,
+        mysql_label_insight_users22.invitation_last_sent_date,
+        mysql_label_insight_users22.registered_date,
+        mysql_label_insight_users22.registration_completed,
+        mysql_label_insight_users22.company
+          ]
+    view_label: "Requester"
+    sql_on: ${requester.email} = ${mysql_label_insight_users22.email}
+            AND ${mysql_label_insight_users22._fivetran_deleted} = FALSE;;
+    relationship: many_to_one
+  }
+
+  join: mysql_label_insight_users_campaign_choices {
+    view_label: "Requester"
+    relationship: one_to_one
+    sql_on: ${mysql_label_insight_users22.id} =  ${mysql_label_insight_users_campaign_choices.user_id}
+      AND ${mysql_label_insight_users_campaign_choices._fivetran_deleted} = FALSE;;
+  }
+
 }
