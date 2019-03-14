@@ -56,13 +56,6 @@ view: ticket {
     group_label: "Basic Ticket Information"
   }
 
-  dimension: ticket_category_clean {
-    group_label: "Basic Ticket Information"
-    label: "Cleaned Combined Ticket Categories"
-    description: "Client-facing ticket categories bucketing custom ticket categories."
-    sql: REGEXP_REPLACE(${custom_ticket_categories}, r"_+"," " );;
-  }
-
   dimension: ticket_category {
     group_label: "Basic Ticket Information"
     label: "Combined Ticket Categories"
