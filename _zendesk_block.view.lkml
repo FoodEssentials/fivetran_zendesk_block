@@ -74,11 +74,11 @@ view: ticket {
       label: "Capture Bug S1-Blocker"
       }
       when: {
-        sql: ${custom_ticket_categories}= "capture__bug__p1s2" AND ${custom_ticket_categories}= "capture__bug__p2s2" AND ${custom_ticket_categories}= "capture__bug__p3s2";;
+        sql: ${custom_ticket_categories}= "capture__bug__p1s2" OR ${custom_ticket_categories}= "capture__bug__p2s2" OR ${custom_ticket_categories}= "capture__bug__p3s2";;
         label: "Capture Bug S2-Critical"
       }
       when: {
-        sql: ${custom_ticket_categories}= "capture__bug__p1s3" AND ${custom_ticket_categories}= "capture__bug__p2s3" AND ${custom_ticket_categories}= "capture__bug";;
+        sql: ${custom_ticket_categories}= "capture__bug__p1s3" OR ${custom_ticket_categories}= "capture__bug__p2s3" OR ${custom_ticket_categories}= "capture__bug";;
         label: "Capture Bug S3-Major"
       }
       when: {
@@ -114,7 +114,7 @@ view: ticket {
         label: "Capture - Training Gap"
       }
       when: {
-        sql: ${custom_ticket_categories}= "capture__other" AND ${custom_ticket_categories}= "capture__unknown";;
+        sql: ${custom_ticket_categories}= "capture__other" OR ${custom_ticket_categories}= "capture__unknown";;
         label: "Capture - Other"
       }
       when: {
@@ -126,11 +126,11 @@ view: ticket {
         label: "Explore Bug S1-Blocker"
       }
       when: {
-        sql: ${custom_ticket_categories}= "explore__bug__p1s2" AND ${custom_ticket_categories}= "explore__bug__p2s2";;
+        sql: ${custom_ticket_categories}= "explore__bug__p1s2" OR ${custom_ticket_categories}= "explore__bug__p2s2";;
         label: "Explore Bug S2-Critical"
       }
       when: {
-        sql: ${custom_ticket_categories}= "explore__bug__p1s3" AND ${custom_ticket_categories}= "explore__bug" AND ${custom_ticket_categories}= "explore__bug__p3s3";;
+        sql: ${custom_ticket_categories}= "explore__bug__p1s3" OR ${custom_ticket_categories}= "explore__bug" OR ${custom_ticket_categories}= "explore__bug__p3s3";;
         label: "Explore Bug S3-Major"
       }
       when: {
@@ -162,7 +162,7 @@ view: ticket {
         label: "Explore - Training Gap"
       }
       when: {
-        sql: ${custom_ticket_categories}= "explore__other" AND ${custom_ticket_categories}= "explore__unknown";;
+        sql: ${custom_ticket_categories}= "explore__other" OR ${custom_ticket_categories}= "explore__unknown";;
         label: "Explore - Other"
       }
       when: {
@@ -178,7 +178,7 @@ view: ticket {
         label: "Onboard Bug S2-Critical"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__bug__s3_-_major" AND ${custom_ticket_categories}= "onboard__bug";;
+        sql: ${custom_ticket_categories}= "onboard__bug__s3_-_major" OR ${custom_ticket_categories}= "onboard__bug";;
         label: "Onboard Bug S3-Major"
       }
       when: {
@@ -190,7 +190,7 @@ view: ticket {
         label: "Onboard Bug S5-Cosmetic"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__change_of_contact" AND ${custom_ticket_categories} = "onboard__contact_request";;
+        sql: ${custom_ticket_categories}= "onboard__change_of_contact" OR ${custom_ticket_categories} = "onboard__contact_request";;
         label: "Onboard - Change of Contact"
       }
       when: {
@@ -238,7 +238,7 @@ view: ticket {
         label:  "Onboard - Missing Product"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__other" AND ${custom_ticket_categories}= "onboard__unknown";;
+        sql: ${custom_ticket_categories}= "onboard__other" OR ${custom_ticket_categories}= "onboard__unknown";;
         label: "Onboard - Other"
       }
       when: {
@@ -294,19 +294,19 @@ view: ticket {
         label: "Internal Requests"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__bug__p1s1" AND ${custom_ticket_categories} = "publish__bug__p2s1";;
+        sql: ${custom_ticket_categories} = "publish__bug__p1s1" OR ${custom_ticket_categories} = "publish__bug__p2s1";;
         label: "Publish Bug S1-Blocker"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__bug__p1s2" AND ${custom_ticket_categories} = "publish__bug__p2s2" AND ${custom_ticket_categories} = "publish__bug__p3s2";;
+        sql: ${custom_ticket_categories} = "publish__bug__p1s2" OR ${custom_ticket_categories} = "publish__bug__p2s2" OR ${custom_ticket_categories} = "publish__bug__p3s2";;
         label: "Publish Bug S2-Critical"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__bug__p1s3" AND ${custom_ticket_categories} = "publish__bug__p4s3" AND ${custom_ticket_categories} = "publish__bug__p2s3" AND ${custom_ticket_categories} = "publish__bug__p3s3" ;;
+        sql: ${custom_ticket_categories} = "publish__bug__p1s3" OR ${custom_ticket_categories} = "publish__bug__p4s3" OR ${custom_ticket_categories} = "publish__bug__p2s3" OR ${custom_ticket_categories} = "publish__bug__p3s3" ;;
         label: "Publish Bug S3-Major"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__bug__p1s4" AND ${custom_ticket_categories} = "publish__bug__p2s4" AND ${custom_ticket_categories} = "publish__bug__p3s4" AND ${custom_ticket_categories} = "bug";;
+        sql: ${custom_ticket_categories} = "publish__bug__p1s4" OR ${custom_ticket_categories} = "publish__bug__p2s4" OR ${custom_ticket_categories} = "publish__bug__p3s4" OR ${custom_ticket_categories} = "bug";;
         label: "Publish Bug S4-Minor"
       }
       when: {
@@ -314,15 +314,15 @@ view: ticket {
         label: "Publish Bug S5-Cosmetic"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__data_error" AND ${custom_ticket_categories} = "data_error";;
+        sql: ${custom_ticket_categories} = "publish__data_error" OR ${custom_ticket_categories} = "data_error";;
         label: "Publish - Data Error"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__data_request" AND ${custom_ticket_categories} = "data_request";;
+        sql: ${custom_ticket_categories} = "publish__data_request" OR ${custom_ticket_categories} = "data_request";;
         label: "Publish - Data Request"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__feature_request/_product_feedback" AND ${custom_ticket_categories}= "feature_request/_product_feedback";;
+        sql: ${custom_ticket_categories} = "publish__feature_request/_product_feedback" OR ${custom_ticket_categories}= "feature_request/_product_feedback";;
         label: "Publish - Feature Request/ Product Feedback"
       }
       when: {
@@ -330,11 +330,11 @@ view: ticket {
         label: "Publish - Platform Downtime"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__training_gap" AND ${custom_ticket_categories}= "training_gap";;
+        sql: ${custom_ticket_categories} = "publish__training_gap" OR ${custom_ticket_categories}= "training_gap";;
         label: "Publish - Training Gap"
       }
       when: {
-        sql: ${custom_ticket_categories} = "publish__other" AND ${custom_ticket_categories}= "publish__unknown";;
+        sql: ${custom_ticket_categories} = "publish__other" OR ${custom_ticket_categories}= "publish__unknown";;
         label: "Publish - Other"
       }
       when: {
@@ -358,7 +358,7 @@ view: ticket {
         label: "Snap Issues - Blurry Image"
       }
       when: {
-        sql: ${custom_ticket_categories}= "snap_issues__missing_image" AND ${custom_ticket_categories}= "snap_issues";;
+        sql: ${custom_ticket_categories}= "snap_issues__missing_image" OR ${custom_ticket_categories}= "snap_issues";;
         label: "Snap Issues - Missing Image"
       }
       when: {
@@ -378,7 +378,7 @@ view: ticket {
         label: "Snap Issues - Packaging Flaws & Imperfections"
       }
       when: {
-        sql: ${custom_ticket_categories}= "admin__user_permissions__product_assignments" AND ${custom_ticket_categories}= "capture__user_permissions_and_admin" AND ${custom_ticket_categories}= "explore__user_permissions_and_admin" AND ${custom_ticket_categories}= "user_permissions_and_admin";;
+        sql: ${custom_ticket_categories}= "admin__user_permissions__product_assignments" OR ${custom_ticket_categories}= "capture__user_permissions_and_admin" OR ${custom_ticket_categories}= "explore__user_permissions_and_admin" OR ${custom_ticket_categories}= "user_permissions_and_admin";;
         label: "Admin - User Permissions & Product Assignments"
       }
       when: {
