@@ -425,7 +425,7 @@ view: ticket {
     description: "Custom ticket categories grouped by different LI platform"
     case: {
       when: {
-        sql:${custom_ticket_categories} like "%publish%" IN("data_error", "feature_request/_product_feedback", "data_request", "training_gap", "platform_downtime");;
+        sql:${custom_ticket_categories} like "%publish%" OR ${custom_ticket_categories} IN("data_error", "feature_request/_product_feedback", "data_request", "training_gap", "platform_downtime");;
         label: "Publish"
       }
       when: {
