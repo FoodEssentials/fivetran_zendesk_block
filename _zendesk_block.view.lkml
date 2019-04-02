@@ -378,7 +378,7 @@ view: ticket {
         label: "Snap Issues - Packaging Flaws & Imperfections"
       }
       when: {
-        sql: ${custom_ticket_categories}= "admin__user_permissions__product_assignments" OR ${custom_ticket_categories}= "capture__user_permissions_and_admin" OR ${custom_ticket_categories}= "explore__user_permissions_and_admin" OR ${custom_ticket_categories}= "user_permissions_and_admin";;
+        sql: ${custom_ticket_categories}= "admin__user_permissions__product_assignments" OR ${custom_ticket_categories}= "capture__user_permissions_and_admin" OR ${custom_ticket_categories}= "explore__user_permissions_and_admin" OR ${custom_ticket_categories}= "user_permissions_and_admin" OR ${custom_ticket_categories}= "admin__user_permissions";;
         label: "Admin - User Permissions & Product Assignments"
       }
       when: {
