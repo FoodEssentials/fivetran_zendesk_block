@@ -78,7 +78,7 @@ view: ticket {
         label: "Capture Bug S2-Critical"
       }
       when: {
-        sql: ${custom_ticket_categories}= "capture__bug__p1s3" OR ${custom_ticket_categories}= "capture__bug__p2s3" OR ${custom_ticket_categories}= "capture__bug";;
+        sql: ${custom_ticket_categories}= "capture__bug__p1s3" OR ${custom_ticket_categories}= "capture__bug__p2s3" OR ${custom_ticket_categories}= "capture__bug" OR ${custom_ticket_categories}= "capture__bug__p3s3";;
         label: "Capture Bug S3-Major"
       }
       when: {
@@ -234,7 +234,7 @@ view: ticket {
         label: "Onboard - LI Initiative Overview"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__missing_products_" ;;
+        sql: ${custom_ticket_categories}= "onboard___missing_products_" ;;
         label:  "Onboard - Missing Product"
       }
       when: {
@@ -414,7 +414,7 @@ view: ticket {
         label: "Admin - Help Center Widget"
       }
       when: {
-        sql: ${custom_ticket_categories}= "admin__other" ;;
+        sql: ${custom_ticket_categories}= "admin__other" OR ${custom_ticket_categories}= "admin__product_assignments_";;
         label: "Admin - Other"
       }
     }
