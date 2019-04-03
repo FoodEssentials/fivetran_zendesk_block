@@ -448,6 +448,10 @@ view: ticket {
         sql:${custom_ticket_categories} like "%snap%";;
         label: "Snap"
       }
+      when: {
+        sql:${custom_ticket_categories} like "%onboard%";;
+        label: "Onboard"
+      }
     }
   }
 
