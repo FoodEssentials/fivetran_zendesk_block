@@ -270,6 +270,10 @@ view: ticket {
         label: "Onboard - Requested Products- UPC Request - Overview/Explanation"
       }
       when: {
+        sql: ${custom_ticket_categories}= "onboard__requested_products__products_previously_onboarded_" ;;
+        label: "Onboard - Requested Products- Products Previously Onboarded"
+      }
+      when: {
         sql: ${custom_ticket_categories}= "onboard__registration_error";;
         label: "Onboard - Registration Error"
       }
