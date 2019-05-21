@@ -294,6 +294,34 @@ view: ticket {
         label: "Onboard - Updating Data"
       }
       when: {
+        sql: ${custom_ticket_categories}= "informa__delete_product_requested" ;;
+        label: "Expo - Delete Product Requested"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "informa__wrong_products_showing" ;;
+        label: "Expo - Wrong Products Showing"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "informa__marketing_images_not_showing" ;;
+        label: "Expo - Marketing Images Not Showing"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "informa__timeline_questions" ;;
+        label: "Expo - Timeline Questions"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "informa__wrong_booth_number" ;;
+        label: "Expo - Wrong Booth Number"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "informa__wrong_company_information" ;;
+        label: "Expo - Wrong Company Information"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "informa__transfer_products_from_last_show" ;;
+        label: "Expo - Transfer Products from Last Show"
+      }
+      when: {
         sql: ${custom_ticket_categories}= "internal_requests";;
         label: "Internal Requests"
       }
@@ -455,6 +483,10 @@ view: ticket {
       when: {
         sql:${custom_ticket_categories} like "%onboard%";;
         label: "Onboard"
+      }
+      when: {
+        sql: ${custom_ticket_categories} like "%informa" ;;
+        label: "Expo"
       }
     }
   }
