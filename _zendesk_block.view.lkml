@@ -142,6 +142,10 @@ view: ticket {
         label: "Explore Bug S5-Cosmetic"
       }
       when: {
+        sql: ${custom_ticket_categories}= "explore___data_currency";;
+        label: "Explore - Data Currency"
+      }
+      when: {
         sql: ${custom_ticket_categories}= "explore__data_error";;
         label: "Explore - Data Error"
       }
@@ -194,10 +198,6 @@ view: ticket {
         label: "Onboard - Change of Contact"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__check_in" ;;
-        label: "Onboard - Check In"
-      }
-      when: {
         sql: ${custom_ticket_categories}= "onboard__deleting_images_";;
         label: "Onboard - Deleting Images"
       }
@@ -238,7 +238,7 @@ view: ticket {
         label:  "Onboard - Missing Product"
       }
       when: {
-        sql: ${custom_ticket_categories}= "onboard__other" OR ${custom_ticket_categories}= "onboard__unknown";;
+        sql: ${custom_ticket_categories}= "onboard__other" OR ${custom_ticket_categories}= "onboard__unknown" OR ${custom_ticket_categories}= "onboard__check_in";;
         label: "Onboard - Other"
       }
       when: {
@@ -252,6 +252,10 @@ view: ticket {
       when: {
         sql: ${custom_ticket_categories}= "onboard__portal_navigation__products_with_issues" ;;
         label: "Onboard - Portal Navigation - Products with Issues"
+      }
+      when: {
+        sql: ${custom_ticket_categories}= "onboard__portal_navigation__processing/_delay" ;;
+        label: "Onboard - Portal Navigation - Processing/ Delay"
       }
       when: {
         sql: ${custom_ticket_categories}= "onboard__portal_navigation__products_ready_for_processing" ;;
