@@ -3,7 +3,7 @@ connection: "bigquery"
 include: "*_zendesk_block.view"
 include: "*_zendesk_variables.view"
 include: "*.dashboard"
-include: "//labelinsight/*.view"
+include: "//labelinsight/**/*.view"
 
 explore: ticket {
   join: assignee {
