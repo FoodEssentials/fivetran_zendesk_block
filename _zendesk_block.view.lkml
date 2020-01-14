@@ -1554,6 +1554,8 @@ view: ticket_history_facts {
     group_label: "Status Dates"
     type: time
     timeframes: [
+      day_of_week,
+      hour_of_day,
       raw,
       time,
       date,
