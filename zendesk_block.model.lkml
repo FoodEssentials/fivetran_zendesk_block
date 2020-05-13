@@ -4,6 +4,16 @@ include: "*_zendesk_block.view"
 include: "*_zendesk_variables.view"
 include: "*.dashboard"
 include: "//labelinsight/**/*.view"
+include: "//jira_block/bigquery/issue.view"
+include: "//jira_block/bigquery/*.view"
+include: "//jira_block/models/*.view"
+
+datagroup: fivetran_datagroup {
+  sql_trigger: SELECT MAX(TIMESTAMP_TRUNC(done, MINUTE)) FROM jira.fivetran_audit ;;
+  max_cache_age: "24 hours"
+}
+
+persist_with: fivetran_datagroup
 
 explore: ticket {
   join: assignee {
@@ -98,6 +108,53 @@ explore: ticket {
     relationship: one_to_one
     sql_on: ${mysql_label_insight_users22.id} =  ${mysql_label_insight_users_campaign_choices.user_id}
       AND ${mysql_label_insight_users_campaign_choices._fivetran_deleted} = FALSE;;
+  }
+
+  join: jira_zendesk_ids {
+    relationship: one_to_many
+    sql_on: ${ticket.id} = ${jira_zendesk_ids.zendesk_ticket_id} ;;
+  }
+
+  join: issue {
+    view_label: "JIRA Issue"
+    relationship: many_to_one
+    sql_on: ${issue.id} = ${jira_zendesk_ids.jira_id} ;;
+  }
+
+  join: project {
+    view_label: "JIRA Project"
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${issue.project} = ${project.id} ;;
+  }
+
+  join: point_normalization {
+    view_label: "JIRA Issue"
+    relationship: many_to_one
+    sql_on: TIMESTAMP_TRUNC(${issue.resolved_raw}, MONTH) = ${point_normalization.month}
+      AND ${project.key} = ${point_normalization.project_key} ;;
+  }
+
+  join: status {
+    view_label: "JIRA Status"
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${issue.status} = ${status.id} ;;
+  }
+
+  join: issue_sprint {
+    view_label: "JIRA Sprint"
+    type: left_outer
+    sql_on: ${issue_sprint.issue_id} = ${issue.id} ;;
+    relationship: many_to_one
+  }
+
+  join: sprint {
+    view_label: "JIRA Sprint"
+    from: sprint
+    type: left_outer
+    sql_on: ${issue_sprint.sprint_id} = ${sprint.id} ;;
+    relationship: many_to_one
   }
 
 }
