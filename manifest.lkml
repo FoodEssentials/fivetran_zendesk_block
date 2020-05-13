@@ -5,3 +5,7 @@ project_name: "zendesk"
 local_dependency: {
   project: "labelinsight"
 }
+
+local_dependency: {
+  project: "jira_block"
+}

@@ -1080,7 +1080,7 @@ view: ticket {
   }
 }
 
-view: user {
+view: zendesk_user {
   extends: [_variables]
   sql_table_name: zendesk.user ;;
   extension: required
@@ -1118,7 +1118,7 @@ view: user {
 }
 
 view: commenter {
-  extends: [user]
+  extends: [zendesk_user]
 
   dimension: is_internal {
     type: yesno
@@ -1128,7 +1128,7 @@ view: commenter {
 }
 
 view: assignee {
-  extends: [user]
+  extends: [zendesk_user]
 
   dimension: name {
     label: "{% if  _view._name == 'assignee' %} {{'Assignee Name'}} {% elsif _view._name == 'commenter' %} {{ 'Commenter Name'}} {% else %} {{ 'Requester Name'}} {% endif %} "
@@ -1179,7 +1179,7 @@ view: assignee {
 }
 
 view: requester {
-  extends: [user]
+  extends: [zendesk_user]
   # The user who is asking for support through a ticket is the requester.
 
   dimension: locale {
@@ -1911,5 +1911,36 @@ view: ticket_tags {
     description: "A comma seperated list of all tags associated with this product."
     type: list
     list_field: tag
+  }
+}
+
+view: jira_zendesk_ids {
+  derived_table: {
+    sql:
+    SELECT DISTINCT
+      CONCAT(SAFE_CAST(id AS STRING), '-', SAFE_CAST(zendesk_ticket_id AS STRING)) as pkey,
+      SAFE_CAST(id AS INT64) as jira_id,
+      SAFE_CAST(zendesk_ticket_id AS INT64) as zendesk_ticket_id
+    FROM jira.issue, UNNEST(SPLIT(zendesk_ticket_ids)) as zendesk_ticket_id
+    ;;
+  }
+
+  dimension: pkey {
+    type: string
+    sql: ${TABLE}.pkey ;;
+    hidden: yes
+    primary_key: yes
+  }
+
+  dimension: jira_id {
+    type: number
+    sql: ${TABLE}.jira_id ;;
+    hidden: yes
+  }
+
+  dimension: zendesk_ticket_id {
+    type: number
+    sql: ${TABLE}.zendesk_ticket_id ;;
+    hidden: yes
   }
 }
