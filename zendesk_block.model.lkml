@@ -157,4 +157,19 @@ explore: ticket {
     relationship: many_to_one
   }
 
+  join: epic {
+    view_label: "JIRA Epic"
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${issue.epic_link} = ${epic.id} ;;
+  }
+
+  join: epic_status {
+    view_label: "JIRA Issue"
+    from: field_option
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${issue.epic_status} = ${epic_status.id} ;;
+  }
+
 }
