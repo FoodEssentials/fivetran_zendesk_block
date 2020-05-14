@@ -121,6 +121,12 @@ explore: ticket {
     sql_on: ${issue.id} = ${jira_zendesk_ids.jira_id} ;;
   }
 
+  join: issue_extended {
+    view_label: "JIRA Issue Extended"
+    relationship: many_to_one
+    sql_on: ${issue_extended.id} = ${jira_zendesk_ids.jira_id} ;;
+  }
+
   join: project {
     view_label: "JIRA Project"
     type: left_outer
