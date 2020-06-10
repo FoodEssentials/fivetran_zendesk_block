@@ -1036,6 +1036,16 @@ view: ticket {
     drill_fields: [detail*]
   }
 
+  measure: count_distinct_customer_sla_tickets {
+    label: "Count Distinct Tickets with Customer SLAs"
+    group_label: "Distinct Ticket Count"
+    type: count
+    filters: [
+      response_target_time: "-null"
+    ]
+    drill_fields: [detail*]
+  }
+
   measure: count_distinct_tickets_solved_under_sla {
     label: "Count Distinct Tickets Solved Under SLA"
     group_label: "Distinct Ticket Count"
@@ -1043,8 +1053,7 @@ view: ticket {
     filters: [
       over_bug_severity_response_sla: "No",
       is_solved: "Yes",
-      bug_severity: "-null"
-
+      response_target_time: "-null"
     ]
     drill_fields: [detail*, over_bug_severity_response_sla]
   }
@@ -1052,7 +1061,7 @@ view: ticket {
   measure: percentage_of_tickets_under_sla {
     label: "Percentage Tickets Solved Under SLA"
     type: number
-    sql: SAFE_DIVIDE(${count_distinct_tickets_solved_under_sla}, ${count_solved_tickets}) ;;
+    sql: SAFE_DIVIDE(${count_distinct_tickets_solved_under_sla}, ${count_distinct_customer_sla_tickets}) ;;
     drill_fields: [detail*, over_bug_severity_response_sla]
     value_format_name: percent_2
   }
