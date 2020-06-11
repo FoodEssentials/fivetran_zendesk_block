@@ -48,6 +48,47 @@ view: ticket {
     sql: ${TABLE}.is_public ;;
   }
 
+  dimension: bug_severity {
+    group_label: "Customer Facing SLAs"
+    description: "Bug & Data Issue Resolution Severity Level."
+    type: string
+    sql: ${TABLE}.custom_bug_severity ;;
+  }
+
+  dimension: response_target_time {
+    group_label: "Customer Facing SLAs"
+    description: "Target Bug & Data Issue Resolution Timeline"
+    type: string
+    sql:
+      CASE
+        WHEN ${bug_severity} like '%s1%' THEN '1 Business Day'
+        WHEN ${bug_severity} like '%s2%' THEN '2 Business Days'
+        WHEN ${bug_severity} like '%s3%' THEN '10 Business Days'
+        WHEN ${bug_severity} like '%s4%' THEN '20 Business Days'
+        ELSE NULL
+      END
+    ;;
+  }
+
+  dimension: over_bug_severity_response_sla {
+    label: "Over Bug Severity SLA?"
+    group_label: "Customer Facing SLAs"
+    type: yesno
+    sql:
+      (${response_target_time} = '1 Business Day'
+          AND ${business_hours} > 24)
+        OR
+      (${response_target_time} = '2 Business Day'
+          AND ${business_hours} > 48)
+        OR
+      (${response_target_time} = '10 Business Day'
+          AND ${business_hours} > 240)
+        OR
+      (${response_target_time} = '20 Business Day'
+          AND ${business_hours} > 480)
+    ;;
+  }
+
   dimension: custom_ticket_categories {
     label: "Ticket Categories"
     description: "A required field within a Zendesk ticket. Explaining which platform the ticket occured within, and what the issue was."
@@ -993,6 +1034,36 @@ view: ticket {
     group_label: "Distinct Ticket Count"
     type: count
     drill_fields: [detail*]
+  }
+
+  measure: count_distinct_customer_sla_tickets {
+    label: "Count Distinct Tickets with Customer SLAs"
+    group_label: "Distinct Ticket Count"
+    type: count
+    filters: [
+      response_target_time: "-null"
+    ]
+    drill_fields: [detail*]
+  }
+
+  measure: count_distinct_tickets_solved_under_sla {
+    label: "Count Distinct Tickets Solved Under SLA"
+    group_label: "Distinct Ticket Count"
+    type: count
+    filters: [
+      over_bug_severity_response_sla: "No",
+      is_solved: "Yes",
+      response_target_time: "-null"
+    ]
+    drill_fields: [detail*, over_bug_severity_response_sla]
+  }
+
+  measure: percentage_of_tickets_under_sla {
+    label: "Percentage Tickets Solved Under SLA"
+    type: number
+    sql: SAFE_DIVIDE(${count_distinct_tickets_solved_under_sla}, ${count_distinct_customer_sla_tickets}) ;;
+    drill_fields: [detail*, over_bug_severity_response_sla]
+    value_format_name: percent_2
   }
 
   # ----- Sets of fields for drilling ------
