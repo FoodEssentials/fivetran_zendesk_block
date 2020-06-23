@@ -778,9 +778,11 @@ view: ticket {
       END
     ;;
     hidden: yes
+    group_label: "Customer Facing SLAs"
   }
 
   dimension_group: sla_due {
+    label: "SLA Due"
     type: time
     timeframes: [
       raw,
@@ -822,6 +824,7 @@ view: ticket {
           NULL
       END
     ;;
+    group_label: "Customer Facing SLAs"
   }
 
   dimension: weekdays_to_solve {
