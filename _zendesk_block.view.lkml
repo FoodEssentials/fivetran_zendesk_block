@@ -626,6 +626,7 @@ view: ticket {
       day_of_week,
       hour_of_day,
       time,
+      time_of_day,
       date,
       week,
       day_of_week_index,
@@ -739,6 +740,91 @@ view: ticket {
             <div style="color: black; background-color: yellow; font-size:100%; text-align:center">{{ rendered_value }}</div>
           {% endif %}
       ;;
+  }
+
+  dimension_group: created_start_of_business {
+    type: time
+    timeframes: [
+      raw,
+      day_of_week,
+      hour_of_day,
+      time,
+      date,
+      week,
+      day_of_week_index,
+      month,
+      quarter,
+      year
+    ]
+    sql:
+      CASE
+        -- M-Th after 5pm = next day 9am
+        WHEN
+          ${created_day_of_week_index} IN (0,1,2,3) AND ${created_hour_of_day} > 16
+        THEN
+          TIMESTAMP( CONCAT( SAFE_CAST( DATE_ADD( ${created_date}, INTERVAL 1 DAY) AS STRING), " 09:00:00") )
+        -- M-F before 9am = same day 9am
+        WHEN
+          ${created_day_of_week_index} IN (0,1,2,3,4) AND ${created_hour_of_day} < 9
+        THEN
+          TIMESTAMP( CONCAT( SAFE_CAST(${created_date} AS STRING), " 09:00:00") )
+        -- F after 5pm and Sat = next Monday 9am
+        WHEN
+          (${created_day_of_week_index} IN (4) AND ${created_hour_of_day} > 16) OR ${created_day_of_week_index} IN (5,6)
+        THEN
+          TIMESTAMP( CONCAT( SAFE_CAST( DATE_ADD( ${created_date}, INTERVAL 7-${created_day_of_week_index} DAY) AS STRING), " 09:00:00") )
+        ELSE
+          ${created_raw}
+      END
+    ;;
+    hidden: yes
+    group_label: "Customer Facing SLAs"
+  }
+
+  dimension_group: sla_due {
+    label: "SLA Due"
+    type: time
+    timeframes: [
+      raw,
+      day_of_week,
+      hour_of_day,
+      time,
+      date,
+      week,
+      day_of_week_index,
+      month,
+      quarter,
+      year
+    ]
+    sql:
+      CASE
+        WHEN
+          ${response_target_time} = '1 Business Day'
+        THEN
+          TIMESTAMP_ADD( ${created_raw}, INTERVAL 8 HOUR)
+        WHEN
+          ${response_target_time} = '2 Business Days'
+          AND ${created_start_of_business_day_of_week_index} IN (0,1,2)
+        THEN
+          TIMESTAMP_ADD( ${created_start_of_business_raw}, INTERVAL 2 DAY)
+        WHEN
+          ${response_target_time} = '2 Business Days'
+          AND ${created_start_of_business_day_of_week_index} IN (3,4)
+        THEN
+          TIMESTAMP_ADD( ${created_start_of_business_raw}, INTERVAL 7-${created_start_of_business_day_of_week_index} DAY)
+        WHEN
+          ${response_target_time} = '10 Business Days'
+        THEN
+          TIMESTAMP_ADD( ${created_start_of_business_raw}, INTERVAL 14 DAY)
+        WHEN
+          ${response_target_time} = '20 Business Days'
+        THEN
+          TIMESTAMP_ADD( ${created_start_of_business_raw}, INTERVAL 28 DAY)
+        ELSE
+          NULL
+      END
+    ;;
+    group_label: "Customer Facing SLAs"
   }
 
   dimension: weekdays_to_solve {
