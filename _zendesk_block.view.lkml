@@ -1696,6 +1696,7 @@ view: ticket_history_facts {
           ,MAX(updated) AS updated
           ,MIN(case when field_name = 'assignee_id' then updated else null end) AS initially_assigned
           ,SUM(case when field_name = 'assignee_id' then 1 else 0 end) as number_of_assignee_changes
+          ,SUM(case when field_name = '360043017774' and length(value) > 0 then 1 else 0 end) as number_of_bug_severity_changes
           ,count(distinct case when field_name = 'assignee_id' then value else null end) as number_of_distinct_assignees
           ,count(distinct case when field_name = 'group_id' then value else null end) as number_of_distinct_groups
 
@@ -1832,6 +1833,12 @@ view: ticket_history_facts {
     description: "Number of times the assignee changed for a ticket (including initial assignemnt)"
   }
 
+  dimension: number_of_bug_severity_changes {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.number_of_bug_severity_changes ;;
+  }
+
   dimension: number_of_distinct_assignees {
     hidden: yes
     type: number
@@ -1844,6 +1851,25 @@ view: ticket_history_facts {
     type: number
     sql: ${TABLE}.number_of_distinct_groups ;;
     description: "Number of distinct groups for a ticket"
+  }
+
+  measure: count_correct_triage {
+    group_label: "Bug Triage Metrics"
+    type: count_distinct
+    sql: CASE WHEN ${number_of_bug_severity_changes} = 1 THEN ${ticket_id} ELSE NULL END;;
+  }
+
+  measure: count_incorrect_triage {
+    group_label: "Bug Triage Metrics"
+    type: count_distinct
+    sql: CASE WHEN ${number_of_bug_severity_changes} > 1 THEN ${ticket_id} ELSE NULL END;;
+  }
+
+  measure: triage_accuracy {
+    group_label: "Bug Triage Metrics"
+    type: number
+    sql: SAFE_DIVIDE( ${count_correct_triage}, ${count_correct_triage} + ${count_incorrect_triage} ) ;;
+    value_format_name: percent_2
   }
 
   measure: total_number_of_distinct_assignees {
