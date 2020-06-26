@@ -75,17 +75,9 @@ view: ticket {
     group_label: "Customer Facing SLAs"
     type: yesno
     sql:
-      (${response_target_time} = '1 Business Day'
-          AND ${business_hours} > 24)
-        OR
-      (${response_target_time} = '2 Business Day'
-          AND ${business_hours} > 48)
-        OR
-      (${response_target_time} = '10 Business Day'
-          AND ${business_hours} > 240)
-        OR
-      (${response_target_time} = '20 Business Day'
-          AND ${business_hours} > 480)
+    (${is_solved} = TRUE AND ${ticket_history_facts.solved_raw} > ${sla_due_raw})
+    OR
+    (${is_solved} = FALSE AND CURRENT_TIMESTAMP() > ${sla_due_raw})
     ;;
   }
 
