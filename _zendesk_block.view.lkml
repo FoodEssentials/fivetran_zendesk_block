@@ -2089,6 +2089,96 @@ view: ticket_tags {
   }
 }
 
+view: zendesk_satisfaction_rating {
+  sql_table_name: zendesk.satisfaction_rating ;;
+
+  dimension: id {
+    primary_key: yes
+    type: number
+    sql: ${TABLE}.id ;;
+    hidden: yes
+  }
+
+  dimension_group: _fivetran_synced {
+    type: time
+    sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
+  }
+
+  dimension: ticket_id {
+    type: number
+    sql: ${TABLE}.ticket_id ;;
+    hidden: yes
+  }
+
+  dimension_group: created_at {
+    type: time
+    timeframes: [time, date, week, month]
+    sql: ${TABLE}.created_at ;;
+  }
+
+  dimension: comment {
+    type: string
+    sql: ${TABLE}.comment ;;
+  }
+
+  dimension: score {
+    description: "offered, unoffered, good, or bad"
+    type: string
+    sql: ${TABLE}.score ;;
+  }
+
+  dimension: reason {
+    type: string
+    sql: ${TABLE}.reason ;;
+  }
+
+  measure: count_distinct_offered_satisfaction_rating {
+    type: count
+    filters: [
+      score: "offered"
+    ]
+    hidden: yes
+  }
+  measure: count_distinct_unoffered_satisfaction_rating {
+    type: count
+    filters: [
+      score: "unoffered"
+    ]
+    hidden: yes
+  }
+  measure: count_distinct_good_satisfaction_rating {
+    label: "Total Good Ratings"
+    type: count
+    filters: [
+      score: "good"
+    ]
+  }
+  measure: count_distinct_bad_satisfaction_rating {
+    label: "Total Bad Ratings"
+    type: count
+    filters: [
+      score: "bad"
+    ]
+  }
+  measure: count_distinct_satisfaction_rating_responses {
+    label: "Total Ratings"
+    type: number
+    sql: ${count_distinct_good_satisfaction_rating} + ${count_distinct_bad_satisfaction_rating} ;;
+  }
+  measure: satisfaction_response_rate {
+    type: number
+    sql: SAFE_DIVIDE( ${count_distinct_satisfaction_rating_responses}, ${count_distinct_offered_satisfaction_rating} + ${count_distinct_satisfaction_rating_responses} ) ;;
+    value_format_name: percent_2
+  }
+  measure: satisfaction_score {
+    type: number
+    sql: SAFE_DIVIDE( ${count_distinct_good_satisfaction_rating}, ${count_distinct_satisfaction_rating_responses} ) ;;
+    value_format_name: percent_2
+  }
+
+}
+
 view: jira_zendesk_ids {
   derived_table: {
     sql:

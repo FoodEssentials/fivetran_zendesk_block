@@ -85,6 +85,11 @@ explore: ticket {
     relationship: many_to_many
   }
 
+  join: zendesk_satisfaction_rating {
+    relationship: one_to_many
+    sql_on: ${ticket.id} = ${zendesk_satisfaction_rating.ticket_id} ;;
+  }
+
   # adding JIRA Information
   join: jira_zendesk_ids {
     relationship: one_to_many
