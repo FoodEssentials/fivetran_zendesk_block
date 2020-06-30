@@ -1063,7 +1063,8 @@ view: ticket {
 
   measure: count_backlogged_tickets {
     group_label: "Status Counts"
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
     filters: {
       field: is_backlogged
       value: "Yes"
@@ -1073,7 +1074,8 @@ view: ticket {
 
   measure: count_new_tickets {
     group_label: "Status Counts"
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
     filters: {
       field: is_new
       value: "Yes"
@@ -1083,7 +1085,8 @@ view: ticket {
 
   measure: count_open_tickets {
     group_label: "Status Counts"
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
     filters: {
       field: is_open
       value: "Yes"
@@ -1093,7 +1096,8 @@ view: ticket {
 
   measure: count_solved_tickets {
     group_label: "Status Counts"
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
     filters: {
       field: is_solved
       value: "Yes"
@@ -1110,28 +1114,30 @@ view: ticket {
   measure: count {
     label: "Count Distinct Tickets"
     group_label: "Distinct Ticket Count"
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
     drill_fields: [detail*]
   }
 
   measure: count_distinct_customer_sla_tickets {
     label: "Count Distinct Tickets with Customer SLAs"
     group_label: "Distinct Ticket Count"
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
     filters: [
       response_target_time: "-null"
     ]
     drill_fields: [detail*]
   }
 
-  measure: count_distinct_tickets_solved_under_sla {
+  measure: count_distinct_tickets_under_sla {
     label: "Count Distinct Tickets Solved Under SLA"
     group_label: "Distinct Ticket Count"
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
     filters: [
       over_bug_severity_response_sla: "No",
-      is_solved: "Yes",
-      response_target_time: "-null"
+      sla_due_date: "-null"
     ]
     drill_fields: [detail*, over_bug_severity_response_sla]
   }
@@ -1139,8 +1145,8 @@ view: ticket {
   measure: percentage_of_tickets_under_sla {
     label: "Percentage Tickets Solved Under SLA"
     type: number
-    sql: SAFE_DIVIDE(${count_distinct_tickets_solved_under_sla}, ${count_distinct_customer_sla_tickets}) ;;
-    drill_fields: [detail*, over_bug_severity_response_sla]
+    sql: SAFE_DIVIDE(${count_distinct_tickets_under_sla}, ${count_distinct_customer_sla_tickets}) ;;
+    drill_fields: [detail*, over_bug_severity_response_sla, count_distinct_tickets_under_sla, count_distinct_customer_sla_tickets]
     value_format_name: percent_2
   }
 
