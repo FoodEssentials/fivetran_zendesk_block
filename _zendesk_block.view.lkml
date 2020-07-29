@@ -1694,7 +1694,8 @@ view: ticket_history_facts {
           ,MAX(updated) AS updated
           ,MIN(case when field_name = 'assignee_id' then updated else null end) AS initially_assigned
           ,SUM(case when field_name = 'assignee_id' then 1 else 0 end) as number_of_assignee_changes
-          ,SUM(case when field_name = '360043017774' and length(value) > 0 then 1 else 0 end) as number_of_bug_severity_changes
+          ,SUM(case when (field_name = '360043017774' and (length(value) > 0)) then 1 else 0 end) as number_of_bug_severity_changes
+          ,MAX(case when (field_name = '360043017774' and (length(value) > 0)) then updated else null end) as last_updated_bug_severity
           ,count(distinct case when field_name = 'assignee_id' then value else null end) as number_of_distinct_assignees
           ,count(distinct case when field_name = 'group_id' then value else null end) as number_of_distinct_groups
 
@@ -1835,6 +1836,20 @@ view: ticket_history_facts {
     hidden: yes
     type: number
     sql: ${TABLE}.number_of_bug_severity_changes ;;
+  }
+
+  dimension_group: last_updated_bug_severity {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: TIMESTAMP(DATETIME(${TABLE}.last_updated_bug_severity, "America/Chicago")) ;;
   }
 
   dimension: number_of_distinct_assignees {
