@@ -63,8 +63,8 @@ view: ticket {
       CASE
         WHEN ${bug_severity} like '%s1%' THEN '1 Business Day'
         WHEN ${bug_severity} like '%s2%' THEN '2 Business Days'
-        WHEN ${bug_severity} like '%s3%' THEN '10 Business Days'
-        WHEN ${bug_severity} like '%s4%' THEN '20 Business Days'
+        WHEN ${bug_severity} like '%s3%' THEN '5 Business Days'
+        WHEN ${bug_severity} like '%s4%' THEN '10 Business Days'
         ELSE NULL
       END
     ;;
@@ -805,13 +805,13 @@ view: ticket {
         THEN
           TIMESTAMP_ADD( ${created_start_of_business_raw}, INTERVAL 7-${created_start_of_business_day_of_week_index} DAY)
         WHEN
+          ${response_target_time} = '5 Business Days'
+        THEN
+          TIMESTAMP_ADD( ${created_start_of_business_raw}, INTERVAL 7 DAY)
+        WHEN
           ${response_target_time} = '10 Business Days'
         THEN
           TIMESTAMP_ADD( ${created_start_of_business_raw}, INTERVAL 14 DAY)
-        WHEN
-          ${response_target_time} = '20 Business Days'
-        THEN
-          TIMESTAMP_ADD( ${created_start_of_business_raw}, INTERVAL 28 DAY)
         ELSE
           NULL
       END
