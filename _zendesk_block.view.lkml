@@ -4,6 +4,18 @@ view: ticket {
   extends: [_variables]
   sql_table_name: zendesk.ticket ;;
 
+  set: ticket_detail {
+    fields: [
+        id,
+        id_direct_link,
+        subject,
+        created_date,
+        sla_due_date,
+        status,
+        requester.email
+    ]
+  }
+
   # ----- database fields -----
   dimension: id {
     description: "Unique ID for the Zendesk ticket."
@@ -1069,7 +1081,7 @@ view: ticket {
       field: is_backlogged
       value: "Yes"
     }
-    drill_fields: [detail*]
+    drill_fields: [ticket_detail*]
   }
 
   measure: count_new_tickets {
@@ -1080,7 +1092,7 @@ view: ticket {
       field: is_new
       value: "Yes"
     }
-    drill_fields: [detail*]
+    drill_fields: [ticket_detail*]
   }
 
   measure: count_open_tickets {
@@ -1091,7 +1103,7 @@ view: ticket {
       field: is_open
       value: "Yes"
     }
-    drill_fields: [detail*]
+    drill_fields: [ticket_detail*]
   }
 
   measure: count_solved_tickets {
@@ -1102,7 +1114,7 @@ view: ticket {
       field: is_solved
       value: "Yes"
     }
-    drill_fields: [detail*]
+    drill_fields: [ticket_detail*]
   }
 
   measure: avg_minutes_to_response {
@@ -1116,7 +1128,7 @@ view: ticket {
     group_label: "Distinct Ticket Count"
     type: count_distinct
     sql: ${id} ;;
-    drill_fields: [detail*]
+    drill_fields: [ticket_detail*]
   }
 
   measure: count_distinct_customer_sla_tickets {
@@ -1127,7 +1139,7 @@ view: ticket {
     filters: [
       response_target_time: "-null"
     ]
-    drill_fields: [detail*]
+    drill_fields: [ticket_detail*]
   }
 
   measure: count_distinct_tickets_under_sla {
@@ -1139,14 +1151,14 @@ view: ticket {
       over_bug_severity_response_sla: "No",
       sla_due_date: "-null"
     ]
-    drill_fields: [detail*, over_bug_severity_response_sla]
+    drill_fields: [ticket_detail*, over_bug_severity_response_sla]
   }
 
   measure: percentage_of_tickets_under_sla {
     label: "Percentage Tickets Solved Under SLA"
     type: number
     sql: SAFE_DIVIDE(${count_distinct_tickets_under_sla}, ${count_distinct_customer_sla_tickets}) ;;
-    drill_fields: [detail*, over_bug_severity_response_sla, count_distinct_tickets_under_sla, count_distinct_customer_sla_tickets]
+    drill_fields: [ticket_detail*, over_bug_severity_response_sla, count_distinct_tickets_under_sla, count_distinct_customer_sla_tickets]
     value_format_name: percent_2
   }
 
