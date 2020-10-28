@@ -11,6 +11,8 @@ view: ticket {
         subject,
         created_date,
         sla_due_date,
+        ticket_history_facts.solved_date,
+        over_bug_severity_response_sla,
         status,
         requester.email
     ]
@@ -1331,7 +1333,6 @@ view: assignee {
   # ----- agent comparison fields -----
   filter: agent_select {
     view_label: "Agent Comparisons"
-    suggest_dimension: user.name
   }
 
   dimension: agent_comparitor {
